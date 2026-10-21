@@ -389,6 +389,8 @@ char device_Model[] = "{model A396SY-2  soft V1.0 firm V1.0 }";
 char device_Model[] = "{model A396S-1  soft V1.0 firm V1.0 }";
 #elif defined A560S_2
 char device_Model[] = "{model A560S-2 soft V1.0 firm V0.8 }";
+#elif defined A396SYN_2
+char device_Model[] = "{model A396SYN-2  soft V1.0 firm V1.0 }";
 #elif defined A671S_21
 char device_Model[] = "{model A671S-21  soft V1.0 firm V1.0 }";
 #else
@@ -413,7 +415,7 @@ void Display_Drive_A1(void)
 	uint8_t i;
 #endif
 #ifdef USE_M2
-	
+
 #endif
 	u8 temp, width, method;
 
@@ -865,7 +867,7 @@ void Display_Drive_A1(void)
 #endif
 #ifdef USE_HEALTH_AUTO_NUM
 	// todo 疲劳程度 0-3 对应程序由主板控制 260918
-	switch (Health_Tired) 
+	switch (Health_Tired)
 	{
 #ifdef VIETNAM_VOICE
 	case 0:
@@ -1034,9 +1036,16 @@ void Display_Drive_A4(void)
 #elif defined USE_S0551
 	Display_Data[11] = 0x21; //* 1复位 2童锁
 	Display_Data[12] = 0x43; //* 3蓝牙 4LED
+
 	// @ 分页显示 不同于S0555 260328
+#if (VOICE_CONTROL_EN == 1)
+	Display_Data[13] = 0x21; //* 5背景 6声控
+	Display_Data[14] = 0x03; //* 7语音 8负氧
+#else
 	Display_Data[13] = 0x01; //* 5背景 6声控
 	Display_Data[14] = 0x02; //* 7语音 8负氧
+#endif
+
 	Display_Data[15] = 0x07; //* 音量 音波
 	Display_Data[16] = 0x00; // @ 音波 res 260328
 #endif

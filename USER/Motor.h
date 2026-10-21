@@ -221,7 +221,7 @@ extern "C"
 	LDDG_PHASE_LOW;
 
 #define LDDG_Dir_Set_Stop() \
-	LDDG2_DECAY_HIGH
+	LDDG_DECAY_HIGH  // todo LDDG2_DECAY_HIGH->LDDG_DECAY_HIGH 261015
 
 #elif defined(DDG_Type_NoSignal)
 

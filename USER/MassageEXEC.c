@@ -1,5 +1,6 @@
 #include "MassageEXEC.h"
 #include "MassageLogic.h"
+#include "Leg.h"
 
 MotorT_Work_S MotorT_Work;
 
@@ -14,14 +15,23 @@ void MotorT_100ms_Deal(void) //* 100ms 时基
 	u16 temp16, temp16_1;
 	for (i = MotorT_Back; i < MotorT_Max; i++)
 	{
+#ifdef USE_FOOT_ROCK
+		if (MotorT_Work.RunFlag[i] == 0 && i != MotorT_Rock)
+			continue;
+#else
 		if (MotorT_Work.RunFlag[i] == 0)
 			continue;
+#endif
 		switch (i)
 		{
 		case MotorT_Rock:
+#ifndef USE_FOOT_ROCK
 			if (KeyPush.RockKeyState != 0)
 				break;
 			MotorT_Work.RunFlag[i] = 0;
+#else
+			LegRock_Updata();
+#endif
 			break;
 		case MotorT_Sway:
 			if (KeyPush.FlexKeyState != 0 || KeyPush.LegFlexKeyState != 0 || KeyPush.BackFlexKeyState != 0)

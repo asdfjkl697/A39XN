@@ -176,15 +176,22 @@ void Air_SetGasPart(GasPart1_t AirPart1, GasPart2_t AirPart2)
 
 	/* 通过485通讯，将气阀状态传输到腿部，具体BIT位与气囊对应关系核对协议 */
 #if (LEG_COM)
-#if (1)																								// ! 默认都是脚侧第一阀 大问题 以前量产的脚部气压可能不对 产线过来的样机没有按照SOP生产 260701
-	AirLegBit.StrackBit.BIT1 = AirValve.GasPart.Part2.Bit.FeetF | AirValve.GasPart.Part2.Bit.Ankle; /* 脚前+脚后跟 */
-	AirLegBit.StrackBit.BIT0 = AirValve.GasPart.Part2.Bit.FeetSide;									/* 脚侧 */
-#else
-	AirLegBit.StrackBit.BIT0 = AirValve.GasPart.Part2.Bit.FeetF | AirValve.GasPart.Part2.Bit.Ankle; /* 脚前+脚后跟 */
-	AirLegBit.StrackBit.BIT1 = AirValve.GasPart.Part2.Bit.FeetSide;									/* 脚侧 */
-#endif
-	AirLegBit.StrackBit.BIT2 = AirValve.GasPart.Part2.Bit.CalfSide; /* 腿侧 */
-	AirLegBit.StrackBit.BIT3 = 0;
+	#if (1)																								// ! 默认都是脚侧第一阀 大问题 以前量产的脚部气压可能不对 产线过来的样机没有按照SOP生产 260701
+		AirLegBit.StrackBit.BIT1 = AirValve.GasPart.Part2.Bit.FeetF | AirValve.GasPart.Part2.Bit.Ankle; /* 脚前+脚后跟 */
+		AirLegBit.StrackBit.BIT0 = AirValve.GasPart.Part2.Bit.FeetSide;									/* 脚侧 */
+	#else
+		AirLegBit.StrackBit.BIT0 = AirValve.GasPart.Part2.Bit.FeetF | AirValve.GasPart.Part2.Bit.Ankle; /* 脚前+脚后跟 */
+		AirLegBit.StrackBit.BIT1 = AirValve.GasPart.Part2.Bit.FeetSide;									/* 脚侧 */
+	#endif
+		AirLegBit.StrackBit.BIT2 = AirValve.GasPart.Part2.Bit.CalfSide; /* 腿侧 */
+		AirLegBit.StrackBit.BIT3 = 0;
+
+	// TODO 样机使用 261014
+	// AirLegBit.StrackBit.BIT0 = AirValve.GasPart.Part2.Bit.FeetF | AirValve.GasPart.Part2.Bit.Ankle; /* 脚前+脚后跟 */
+	// AirLegBit.StrackBit.BIT1 = AirValve.GasPart.Part2.Bit.FeetSide;									/* 脚侧 */
+	// AirLegBit.StrackBit.BIT2 = 0;																	/* 腿侧 */
+	// AirLegBit.StrackBit.BIT3 = AirValve.GasPart.Part2.Bit.CalfSide;
+
 	AirLegBit.StrackBit.BIT4 = 0;
 	AirLegBit.StrackBit.BIT5 = 0;
 	AirLegBit.StrackBit.BIT6 = 0;

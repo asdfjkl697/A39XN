@@ -13,11 +13,9 @@
 /*
  * 变量定义 *************************************************************************************************************************************
  */
-#ifdef Debug_Mode
 HeatInfo_S Heat[HeatNum];
-#else
-static HeatInfo_S Heat[HeatNum]; /* 需根据实际开关部位数量，修改 HeatNum 参数的值 */
-#endif
+
+uint8_t RedLight_Duty = 50;
 
 static const uint16_t HeatOnOffTimeTab[][2] =
 	{

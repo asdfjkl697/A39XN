@@ -92,6 +92,8 @@ typedef enum
     Key_AirIntensity,       // @ add 251203
     Key_Volume_Set,
 
+    Key_FootRock = 0x60, // @ add 261015
+
     Key_WakeUp = 200,
     Key_BackUpDown,
     Key_Sit_coder,

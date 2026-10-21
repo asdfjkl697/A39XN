@@ -33,6 +33,8 @@ set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 
 project(A39X LANGUAGES C ASM)
 
+find_package(Python3 REQUIRED COMPONENTS Interpreter)
+
 # ---------------------------------------------------------------------------
 # CPU 编译选项
 #   -mfloat-abi=soft: 与 Keil 一致 (未定义 __FPU_USED, 不使用硬件浮点)
@@ -101,6 +103,12 @@ set(STARTUP_FILE
 # ---------------------------------------------------------------------------
 add_executable(${PROJECT_NAME} ${APP_SOURCES} ${STARTUP_FILE})
 
+# Re-link if the boot image or merge script changes, so the combined HEX is refreshed.
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY LINK_DEPENDS
+    ${CMAKE_SOURCE_DIR}/tools/A390-BOOTLOADER.hex
+    ${CMAKE_SOURCE_DIR}/tools/merge_hex.py
+)
+
 # 固定输出为 A39X.elf (CMAKE_EXECUTABLE_SUFFIX 会被 project() 按 Generic 平台重置,
 # 这里用目标级 SUFFIX 属性保证生成 A39X.elf 而非 A39X)
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".elf")
@@ -130,6 +138,9 @@ target_link_options(${PROJECT_NAME} PRIVATE
 # ---------------------------------------------------------------------------
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_OBJCOPY} -O ihex   $<TARGET_FILE:${PROJECT_NAME}>
+            ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.hex
+    COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/merge_hex.py
+            ${CMAKE_SOURCE_DIR}/tools/A390-BOOTLOADER.hex
             ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.hex
     COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}>
             ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.bin

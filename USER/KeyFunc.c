@@ -5,6 +5,7 @@
 #include "Memory.h"
 #include "Table.h"
 #include "MassageLogic.h"
+#include "Leg.h"
 
 KeyFunc_S Key;
 
@@ -213,6 +214,23 @@ void KeyPowerScan(void) //* 100ms
     }
     else
         Buzzer_Ararm &= 0xdf;
+
+    // todo add 261015
+    if ((KeyPush.RockKeyState && GetLegDataRx()->Rock.Place > 0) ||
+#ifdef USE_FOOT_ROCK
+        (KeyPush.RockKeyState == 2 &&
+         (((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < ROCK_DEF_LEG + 9) ||
+           DDG_Get_LnCurCircle < ROCK_DEF_LEG) &&
+          ((u16)GetLegDataRx()->Rock.CurCircle_H8 << 8) | GetLegDataRx()->Rock.CurCircle_L8) >= ROCKPOS_N2)
+#else
+        0
+#endif
+    )
+    {
+        Buzzer_Ararm = 0x80;
+    }
+    else
+        Buzzer_Ararm &= 0x7f;
 }
 
 void KeyFunc(void)
@@ -445,6 +463,24 @@ void KeyFunc(void)
                 DDG_Set_BackDown();
             }
             break;
+
+        case Key_FootRock:
+            if (WorkStateGet() != WorkState_Work)
+            {
+                KeyPush.RockKeyState = 0;
+                Buzzer = SOUND_ALARM;
+                break;
+            }
+
+#ifdef USE_FOOT_ROCK
+            if (Key.Param == 1 || Key.Param == 2)
+            {
+                KeyPush.RockKeyState = Key.Param;
+                LegRockManualStateSet(Key.Param, 5);
+            }
+#endif
+            break;
+
         default:
             break;
         }
@@ -753,6 +789,14 @@ void KeyFunc(void)
 #ifdef USE_SOUNDWAVE
             nVolume_Real = nVolume;
 #endif
+            RedLight_Duty = nVolume * 10; // todo test 261016
+            if (RedLight_Duty > 100)
+                RedLight_Duty = 100;
+#ifdef USE_REDLIGHT
+            RedLight_PWM(RedLight_Duty); // todo test 261015
+#else
+            Heat3_On(RedLight_Duty);
+#endif
             Flash_Parameter_Write();
             // Flash_Check_Tick = Flash_Check_Time;
             break;
@@ -772,10 +816,12 @@ void KeyFunc(void)
             if (nVoicePlayer)
             {
                 nVoicePlayer = 0;
+                Voice_Ack(VC_BbOff); // todo add 261011
             }
             else
             {
                 nVoicePlayer = 1;
+                Voice_Ack(VC_BbOn); // todo add 261011
             }
             Flash_Parameter_Write();
             Buzzer = SOUND_ACK;
@@ -857,6 +903,11 @@ void KeyFunc(void)
             KeyPush.LegFlexKeyState = 0;
             KeyPush.BackFlexKeyState = 0;
             DDG_Set_Stop();
+            break;
+
+        case Key_FootRock:
+            KeyPush.RockKeyState = 0;
+            LegRockManualStateSet(0, 0);
             break;
 
         case Key_BackTread:
@@ -2195,6 +2246,11 @@ void KeyFunc(void)
                 {
                     Light_Params_Set(4, 255, 255, 255, 2);
                     LED1_ON();
+#ifdef USE_REDLIGHT
+                    RedLight_PWM(RedLight_Duty); // todo test 261015
+#else
+                    Heat3_On(RedLight_Duty);
+#endif
 #ifdef LED2_PWM
                     LED2_PWM_Flag = 1;
 #else
@@ -2204,8 +2260,12 @@ void KeyFunc(void)
                 else
                 {
                     Light_Params_Set(0, 0, 0, 0, 0);
-
                     LED1_OFF();
+#ifdef USE_REDLIGHT
+                    RedLight_Off(); // todo test 261015
+#else
+                    Heat3_Off(); // todo test 261015
+#endif
 #ifdef LED2_PWM
                     LED2_PWM_Flag = 0;
 #else

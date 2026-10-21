@@ -2,6 +2,9 @@
 
 //* 老化伴随程序
 const CoreMixOtherTabItem_t GasTab_LC[] = {
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_2POS, 0x51, 5, 0x21},
+#endif
 	{Air_FeetS, AirPart_ModeB, 50, 10, 40},
 	{Air_Ankle, AirPart_ModeB, 50, 10, 40},
 	{Air_CalfS, AirPart_STOP, 0, 0, 0},
@@ -15,7 +18,9 @@ const CoreMixOtherTabItem_t GasTab_LC[] = {
 	{Air_Seat, AirPart_STOP, 0, 0, 0},
 #endif
 	{Part_EXEC, ConMth_Air, 20, 30, 0},
-
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_FeetS, AirPart_STOP, 0, 0, 0},
 	{Air_Ankle, AirPart_STOP, 0, 0, 0},
 	{Air_CalfS, AirPart_ModeB, 50, 10, 40},
@@ -57,6 +62,9 @@ const CoreMixOtherTabItem_t GasTab_LC[] = {
 };
 
 const CoreMixOtherTabItem_t GasTab_CloseAir[] = {
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Part_EXEC, ConMth_Air, 5, 30, 0},
 
@@ -64,6 +72,9 @@ const CoreMixOtherTabItem_t GasTab_CloseAir[] = {
 };
 //* 7 res 6 Seat 5 Ankle 4 FeetS 3 CalfS 2 ArmR 1 ArmL 0 SHD
 const CoreMixOtherTabItem_t GasTab_UpperAir[] = {
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_UpDw, B(00000001), 50, 10, 40},
 	{Part_EXEC, ConMth_Air, 10, 60, 0},
 
@@ -96,6 +107,9 @@ const CoreMixOtherTabItem_t GasTab_UpperAir[] = {
 };
 
 const CoreMixOtherTabItem_t GasTab_LowerAir[] = {
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
@@ -109,6 +123,10 @@ const CoreMixOtherTabItem_t GasTab_LowerAir[] = {
 	{Air_FeetS, AirPart_ModeB, 60, 3, 7},
 	{Air_Ankle, AirPart_ModeB, 55, 3, 7},
 	{Part_EXEC, ConMth_Air, 20, 30, 0},
+
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_2POS, 0x32, 2, 0x21},
+#endif
 
 #if (AIR_SEAT)
 	{Air_Seat, AirPart_ModeB, 50, 10 + SEAT_AIR_WEAK, 40},
@@ -130,17 +148,30 @@ const CoreMixOtherTabItem_t GasTab_LowerAir[] = {
 //* 7-6 res 5 Ankle 4 FeetS 3 CalfS 2 ArmR 1 ArmL 0 SHD
 const CoreMixOtherTabItem_t GasTab_Full[] = {
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
-
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
+#ifdef USE_FOOT_ROCK
+	{Air_FeetS, AirPart_ModeA, 80 - FEET_AIR_WEAK * 2, 4, 6},
+	{Air_Ankle, AirPart_ModeA, 75 - FEET_AIR_WEAK, 3, 7},
+	{Part_EXEC, ConMth_Air, 10, 60, 0},
+	{Motor_Rock, FootRock_2POS, 0x02, 4, 0x31},
+	{Part_EXEC, ConMth_Air, 20, 60, 0},
+#else
 	{Air_FeetS, AirPart_ModeA, 80 - FEET_AIR_WEAK * 2, 4, 6},
 	{Air_Ankle, AirPart_ModeA, 75 - FEET_AIR_WEAK, 4, 6},
 	{Part_EXEC, ConMth_Air, 30, 60, 0},
+#endif
 
-	{Motor_Calf, MotorPart_FWD, 0, 150, 0}, //* 小腿揉搓 滚刮 延时15秒开启
+	{Motor_Calf, MotorPart_FWD, 0, 90, 0}, //* 小腿揉搓 滚刮 延时9秒开启
+
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001000), 90, 10, 50},
+#elif defined USE_FOOT_ROCK
+	{Air_CalfS, AirPart_ModeB, 90 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50},
 #else
 	{Air_UpDw, B(00001000), 90 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50},
 #endif
@@ -153,6 +184,20 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 
 	// {Motor_Feet, MotorPart_STOP, 0, 0, 0}, //* 关足底滚轮
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_2POS, 0x42, 3, 0x21},
+	{Air_CalfS, AirPart_STOP, 0, 0, 0},
+	{Air_ArmR, AirPart_STOP, 0, 0, 0},
+	{Air_ArmL, AirPart_ModeB, 50, 10, 40},
+	{Part_EXEC, ConMth_Air, 5, 60, 0}, //* 先充5秒
+	{Air_ArmL, AirPart_ModeA, 60, 3, 7},
+	{Part_EXEC, ConMth_Air, 20, 60, 0},
+	{Air_ArmL, AirPart_STOP, 0, 0, 0},
+	{Air_ArmR, AirPart_ModeB, 50, 10, 40},
+	{Part_EXEC, ConMth_Air, 5, 60, 0}, //* 先充5秒
+	{Air_ArmR, AirPart_ModeA, 60, 3, 7},
+	{Part_EXEC, ConMth_Air, 20, 60, 0},
+#else
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Air_ArmL, AirPart_ModeB, 50, 10, 40},
 	{Part_EXEC, ConMth_Air, 5, 60, 0}, //* 先充5秒
@@ -167,10 +212,11 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 	{Air_ArmR, AirPart_ModeA, 60, 3, 7},
 	{Air_FeetS, AirPart_ModeA, 55, 5, 5},
 	{Part_EXEC, ConMth_Air, 20, 60, 0},
+#endif
 
 // {Motor_Feet, MotorPart_FWD, 0, 0, 0}, //* 开足底滚轮
 #ifndef MOTOR_CALF_WEAK
-	{Motor_Calf, MotorPart_FWD, 0, 150, 0},
+	{Motor_Calf, MotorPart_FWD, 0, 90, 0},
 #endif
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001001), 90, 0, 50},
@@ -234,17 +280,28 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 
 const CoreMixOtherTabItem_t GasTab_FullA[] = {
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
-
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
 	{Air_FeetS, AirPart_ModeA, 70 - FEET_AIR_WEAK, 4, 6},
 	{Air_Ankle, AirPart_ModeA, 65 - FEET_AIR_WEAK, 4, 6},
+#ifdef USE_FOOT_ROCK
+	{Part_EXEC, ConMth_Air, 10, 60, 0},
+	{Motor_Rock, FootRock_2POS, 0x32, 5, 0x21},
+	{Part_EXEC, ConMth_Air, 20, 60, 0},
+#else
 	{Part_EXEC, ConMth_Air, 30, 60, 0},
+#endif
 
-	{Motor_Calf, MotorPart_FWD, 0, 150, 0}, //* 小腿揉搓 滚刮 延时15秒开启
+	{Motor_Calf, MotorPart_FWD, 0, 90, 0}, //* 小腿揉搓 滚刮 延时15秒开启
+
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001000), 70, 10, 40},
+#elif defined USE_FOOT_ROCK
+	{Air_CalfS, AirPart_ModeB, 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40},
 #else
 	{Air_UpDw, B(00001000), 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40},
 #endif
@@ -257,6 +314,7 @@ const CoreMixOtherTabItem_t GasTab_FullA[] = {
 
 	// {Motor_Feet, MotorPart_STOP, 0, 0, 0}, //* 关足底滚轮
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
+
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Air_ArmL, AirPart_ModeB, 45, 10, 40},
 	{Part_EXEC, ConMth_Air, 5, 60, 0}, //* 先充5秒
@@ -274,7 +332,7 @@ const CoreMixOtherTabItem_t GasTab_FullA[] = {
 
 // {Motor_Feet, MotorPart_FWD, 0, 0, 0}, //* 开足底滚轮
 #ifndef MOTOR_CALF_WEAK
-	{Motor_Calf, MotorPart_FWD, 0, 150, 0},
+	{Motor_Calf, MotorPart_FWD, 0, 90, 0},
 #endif
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001001), 70, 10, 50},
@@ -316,19 +374,28 @@ const CoreMixOtherTabItem_t GasTab_FullA[] = {
 
 const CoreMixOtherTabItem_t GasTab_FullB[] = {
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
-
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+#endif
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
 	{Air_UpDw, B(00110000), 70, 10, 40},
+#ifdef USE_FOOT_ROCK
+	{Part_EXEC, ConMth_Air, 10, 60, 0},
+	{Motor_Rock, FootRock_2POS, 0x32, 2, 0x21},
+	{Part_EXEC, ConMth_Air, 20, 60, 0},
+#else
 	{Part_EXEC, ConMth_Air, 30, 60, 0},
+#endif
 
-	{Motor_Calf, MotorPart_FWD, 0, 150, 0}, //* 小腿揉搓 滚刮 延时15秒开启
+	{Motor_Calf, MotorPart_FWD, 0, 90, 0}, //* 小腿揉搓 滚刮 延时15秒开启
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001010), 70, 10, 40},
 #else
 	{Air_UpDw, B(00001010), 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40},
 #endif
+
 	{Part_EXEC, ConMth_Air, 25, 60, 0},
 
 	{Air_ArmL, AirPart_STOP, 0, 0, 0},
@@ -354,7 +421,7 @@ const CoreMixOtherTabItem_t GasTab_FullB[] = {
 
 // {Motor_Feet, MotorPart_FWD, 0, 0, 0}, //* 开足底滚轮
 #ifndef MOTOR_CALF_WEAK
-	{Motor_Calf, MotorPart_FWD, 0, 150, 0},
+	{Motor_Calf, MotorPart_FWD, 0, 90, 0},
 #endif
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001001), 70, 10, 50},

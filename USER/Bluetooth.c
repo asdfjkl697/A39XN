@@ -916,6 +916,10 @@ void Blue_Init(void)
 #elif defined A391S_33
     UserCode_data = UserCode_data % 10000;
     User_PrintString5_U32(Str, UserCode_data, 4);
+#elif defined A395SY
+    UserCode_data = UserCode_data % 10000;
+    User_PrintString5_U32(Str, UserCode_data, 4);
+    // User_PrintString5_U32(Str, UserCode_data % 10000, 4);
 #else
     User_PrintString5_U32(Str, UserCode_data, 10); // 打印递增后的编号到字符串
 #endif
@@ -944,6 +948,12 @@ void Blue_Init(void)
     User_Copy_Str(Blue_Name, "L6SPRO-"); // 拷贝蓝牙名称前缀
 #elif defined A396S_1
     User_Copy_Str(Blue_Name, "L6SMAX-"); // 拷贝蓝牙名称前缀
+#elif defined A395SY
+    User_Copy_Str(Blue_Name, "Mikado-"); // 拷贝蓝牙名称前缀
+#elif defined A395SY_6
+    User_Copy_Str(Blue_Name, "A89-"); // 拷贝蓝牙名称前缀
+#elif defined A396SYN_2
+    User_Copy_Str(Blue_Name, "A396SYN-"); // 拷贝蓝牙名称前缀
 #else
     User_Copy_Str(Blue_Name, "IMCM-");
 #endif
@@ -990,9 +1000,9 @@ void Voice_Ack(u8 nId)
     }
 
 #ifdef VIETNAM_VOICE
-    if (nVoicePlayer == 0 && nId > VC_OK)
+    if ((nVoicePlayer == 0 && nId != VC_BbOff) && nId > VC_OK)
 #else
-    if (nVoicePlayer == 0 && nId > VC_SitDown) /** 语音播报 不关闭声控对应词条 250320 */
+    if ((nVoicePlayer == 0 && nId != VC_BbOff) && nId > VC_SitDown) // todo 修改 261011
 #endif
         return;
 

@@ -55,7 +55,7 @@
 //@ 以下定义机型 新增需要需改 1、配置与2、版本 3、蓝牙名称
 // #define A391S_5
 // #define A391S_6
-#define A391S_8 // * 样机
+// #define A391S_8 // * 样机
 // #define A391S_31 //@ 新协议 下发 1.0 升级1.4
 // #define A391S_32 //@ 匈牙利鲁迪/傅美琴 下发量产程序V1.0（260106） V1.1
 // #define A391S_33 //@ 德国贝格罗斯/许小微 下发 1.0
@@ -78,6 +78,7 @@
 // #define A393SY_2
 // #define A396SY_2
 // #define A396S_1 // * 样机
+#define A396SYN_2
 // #define A671S_21 // * 单独工程
 // #define A390_X // * 测试单机芯 弹簧小腿配置 260513
 // #define A390_8 // @ 越南泰
@@ -86,6 +87,7 @@
 // #define A391Y // * 样机
 
 #define USE_BLUE_OTA 1 // TODO 代替 app=8 260924
+#define VOICE_CONTROL_EN 1
 
 #ifdef A391S_5
 #define AIR_CLAFBOT 1
@@ -217,6 +219,10 @@
 #define ROLLER_CALVES_EN 1
 #define ROLLER_FOOT_EN 1
 #elif defined A390S_20
+#define AIR_WEAK 5
+#define FEET_AIR_WEAK 15
+#define CALF_AIR_WEAK 15
+#define MOVEUP_3D_WEAK
 #define USE_S0551
 #define USE_M2_4D
 #define USE_M2
@@ -228,6 +234,9 @@
 #define ROLLER_CALVES_EN 1
 #define ROLLER_FOOT_EN 1
 #elif defined A393S_20
+#define FEET_AIR_WEAK 10
+#define CALF_AIR_WEAK 10
+#define MOVEUP_3D_WEAK
 #define USE_M2_4D
 #define USE_M2
 #define A390_ARMKEY
@@ -317,6 +326,7 @@
 #define HEAT_LEG 1
 #define ROLLER_CALVES_EN 1
 #define ROLLER_FOOT_EN 1
+#define VOICE_CONTROL_EN 0
 #elif defined A395SY_6
 #define FEET_AIR_WEAK 10
 #define CALF_AIR_WEAK 10
@@ -365,6 +375,23 @@
 #define USE_S0551
 #define USE_M2
 #define A390_ARMKEY
+#define LEG_COM 1
+#define HEAT_BACK 1
+#define HEAT_LEG 1
+#define ROLLER_CALVES_EN 1
+#define ROLLER_FOOT_EN 1
+#elif defined A396SYN_2
+#define FEET_AIR_WEAK 5
+#define CALF_AIR_WEAK 18 // @ 15-18 261019
+// #define USE_REDLIGHT // PA7 输出 TIMER2_CH_1 PWM
+// #define USE_REDLIGHT_1KHZ // TIMER2 PWM 测试频率切换为 1kHz
+// #define USE_REDLIGHT_5KHZ // TIMER2 红光 PWM 频率切换为 5kHz
+#define USE_REDLIGHT_2KHZ
+#define USE_FOOT_ROCK
+#define USE_SOUNDWAVE
+#define USE_M2
+#define A390_ARMKEY
+#define ENGLISH_VOICE
 #define LEG_COM 1
 #define HEAT_BACK 1
 #define HEAT_LEG 1
@@ -492,11 +519,6 @@
 #endif
 
 #define SHOULDER_AIR_RNZ_ANTI /* 肩部气压与揉捏互斥 */
-
-// @ add for blue-ota 260301
-// #if (USE_BLUE_APP == 0)
-// #define USE_BLUE_APP 8
-// #endif
 
 /*-----------------------------------加热模块----------------------------------------------------*/
 #define HEAT_SHOULDER 0 /* 肩膀加热 */

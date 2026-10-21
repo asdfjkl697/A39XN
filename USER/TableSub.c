@@ -370,7 +370,6 @@ const CoreMixOtherTabItem_t SubTab_STRC[] = {
 	{Part_STOP, 0, 0, 0, 0},
 };
 
-
 //* STRD
 const CoreMixOtherTabItem_t SubTab_STRD[] = {
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},		   // todo add 260521
@@ -408,12 +407,18 @@ const CoreMixOtherTabItem_t SubTab_STRD[] = {
 	{Motor_Feet, MotorPart_STOP, 0, 0, 0},
 
 	// @ 修改 260106
-	{Part_LOOP, 0, 3, 20, 0},
-	{Motor_Flex, MotorPart_FWD, 35, 0, 3},
+	{Part_LOOP, 0, 3, 24, 0},
+	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
 	{MoveUp_Knead, KNEAD_1R2R, 0xA4, 3, 0x85},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H1, 0, 2},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
-	{Motor_Flex, MotorPart_REV, 35, 0, 3},
+	// todo 增加 翻转
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N4 & 0xFF, ROCKPOS_N4 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x64, 5, 0x22},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+
+	{Motor_Flex, MotorPart_REV, 30, 0, 3},
 	{MoveUp_Knead, KNEAD_FWD_ABS, MOVEUPWIDTHA, 0, 2},
 	{MoveUp_Tread, TREAD_REV_CIRCLE, 24, 0, 4},
 	{Part_EXEC, ConMth_MoveUp, 20, 30, 0},
@@ -431,6 +436,7 @@ const CoreMixOtherTabItem_t SubTab_STRD[] = {
 	{Part_EXEC, ConMth_MoveUp, 20, 30, 0},
 
 	{Air_UpDw, B(00000000), 0, 0, 0}, //* 释放气压
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 	{Motor_Feet, MotorPart_FWD, 0, 0, 0},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 2},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 5, 0, 3},
@@ -469,6 +475,8 @@ const CoreMixOtherTabItem_t SubTab_STRE[] = {
 	{MoveUp_Knead, KNEAD_REV_ABS, MOVEUPWIDTH8, 0, 4},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
+	{Motor_Rock, FootRock_2POS, 0x32, 4, 0x21}, // todo add 261015
+
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 10, 0, 3},
 	{MoveUp_Knead, KNEAD_REV_CNT, 5, 0, 6},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H0, 0, 2},
@@ -496,21 +504,57 @@ const CoreMixOtherTabItem_t SubTab_STRE[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 5, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
-	{Part_LOOP, 0, 3, 12, 0},
+	{Part_LOOP, 0, 2, 14, 0},
 	{MoveUp_Knead, KNEAD_1F2R, 0x54, 0xFF, 0x52}, // * test 251119
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H0, 0, 2},
-	{Motor_Flex, MotorPart_FWD, 35, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
-	{MoveUp_Knead, KNEAD_STOP, 0, 0, 0},
-	{Part_EXEC, ConMth_MoveUp, 20, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N4 & 0xFF, ROCKPOS_N4 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x64, 5, 0x22},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 	{MoveUp_Knead, KNEAD_1F2R, 0x54, 0xFF, 0x52},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H2, 0, 2},
-	{Motor_Flex, MotorPart_REV, 35, 0, 3},
+	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
+	{MoveUp_Knead, KNEAD_STOP, 0, 0, 0},
+	{Part_EXEC, ConMth_MoveUp, 10, 30, 0},
+
+	// {Part_LOOP, 0, 1, 12, 0},
+	// {MoveUp_Knead, KNEAD_1F2R, 0x54, 0xFF, 0x52}, // * test 251119
+	// {MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H0, 0, 2},
+	// {Motor_Flex, MotorPart_FWD, 35, 0, 3},
+	// {Part_EXEC, ConMth_MoveUp, 0, 30, 0},
+	// {MoveUp_Knead, KNEAD_STOP, 0, 0, 0},
+	// {Part_EXEC, ConMth_MoveUp, 20, 30, 0},
+	// {MoveUp_Knead, KNEAD_1F2R, 0x54, 0xFF, 0x52},
+	// {MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H2, 0, 2},
+	// {Motor_Flex, MotorPart_REV, 35, 0, 3},
+	// {Part_EXEC, ConMth_MoveUp, 0, 30, 0},
+	// {MoveUp_Knead, KNEAD_STOP, 0, 0, 0},
+	// {Part_EXEC, ConMth_MoveUp, 10, 30, 0},
+
+	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
+
+	{Part_LOOP, 0, 1, 14, 0},
+	{MoveUp_Knead, KNEAD_1F2R, 0x54, 0xFF, 0x52}, // * test 251119
+	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H0, 0, 2},
+	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N4 & 0xFF, ROCKPOS_N4 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x64, 6, 0x22},
+	// {MoveUp_Knead, KNEAD_STOP, 0, 0, 0},
+	{Part_EXEC, ConMth_MoveUp, 120, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x54, 0xFF, 0x52},
+	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H2, 0, 2},
+	{Motor_Flex, MotorPart_REV, 30, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 	{MoveUp_Knead, KNEAD_STOP, 0, 0, 0},
 	{Part_EXEC, ConMth_MoveUp, 10, 30, 0},
 
 	{Air_UpDw, B(00000000), 0, 0, 0}, //* 释放气压
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 	{Motor_Feet, MotorPart_FWD, 0, 0, 0},
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 2},
@@ -626,7 +670,7 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 4},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
-	{Air_CalfS, AirPart_ModeB, 80, 8, 80},
+	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 8 + CALF_AIR_WEAK / 2, 80 - CALF_AIR_WEAK},
 #if (AIR_CLAFBOT)
 	{Air_CalfB, AirPart_ModeB, 80, 8, 80},
 #endif
@@ -681,23 +725,43 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
 	{Motor_Feet, MotorPart_STOP, 0, 0, 0},
-	{Part_LOOP, 0, 3, 12, 0},
+	{Part_LOOP, 0, 3, 19, 0},
 	{Motor_Flex, MotorPart_FWD, 30, 0, 3}, //* 伸脚
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH3, 0, 5},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_8, 0, 4},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 30, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
+
+	// todo 增加 翻转
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N34 & 0xFF, ROCKPOS_N34 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x64, 5, 0x22},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_9, 0, 4},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 	{Motor_Flex, MotorPart_REV, 30, 0, 3}, //* 缩脚
+#ifdef USE_M2
+	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
+#else
 	{MoveUp_Knead, KNEAD_1F2R, 0x97, 4, 0x62},
+#endif
+
 #if (AIR_CLAFBOT)
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 36, 0, 3},
 #else
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 #endif
-	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0}, // todo 需要停留时间 261011
+
+	{Air_ArmL, AirPart_STOP, 0, 0, 0},
+#if (AIR_CLAFBOT | AIR_SEAT)
+	{Air_Refresh, 0x79, 0, 30, 0},
+#else
+	{Air_Refresh, 0x39, 0, 30, 0}, // @ add 260530
+#endif
+	{Part_EXEC, ConMth_Move, 0, 30, 0},
 
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Motor_Feet, MotorPart_FWD, 0, 0, 0},
@@ -953,12 +1017,19 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 #endif
 	{Motor_Zero, MotorPart_Stretch, 95, 50, 0}, //* 拉伸角度2
 
-	{Part_LOOP, 0, 2, 10, 0},
+	{Part_LOOP, 0, 2, 14, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 12, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 24, 0, 3},
 	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
+
+	// todo 增加 翻转 261015
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N34 & 0xFF, ROCKPOS_N34 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x64, 5, 0x22},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 36, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
@@ -976,6 +1047,13 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 24, 0, 3},
 	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
+
+	// todo 增加 翻转 261015
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N34 & 0xFF, ROCKPOS_N34 >> 8, 5},
+	{MoveUp_Knead, KNEAD_1F2R, 0x64, 5, 0x22},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
+
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 36, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
@@ -1187,7 +1265,12 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 
 	{Motor_Flex, MotorPart_FWD, 30, 0, 3}, //* 伸脚
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	{Part_EXEC, ConMth_MoveUp, 150, 30, 0},
+	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
+
+	// todo 增加 翻转 261015
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N34 & 0xFF, ROCKPOS_N34 >> 8, 5},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 
 	{Motor_Flex, MotorPart_REV, 30, 0, 3}, //* 缩脚
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
@@ -1203,8 +1286,12 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH2, 0, 5},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	// {MoveUp_Tap, FLAP_ACT, 0, 0, 5},
-	{Part_EXEC, ConMth_MoveUp, 150, 30, 0},
+	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
+
+	// todo 增加 翻转 261015
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N34 & 0xFF, ROCKPOS_N34 >> 8, 5},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 
 	{Motor_Flex, MotorPart_REV, 30, 0, 3},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
@@ -1214,7 +1301,12 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	{Part_EXEC, ConMth_MoveUp, 150, 30, 0},
+	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
+
+	// todo 增加 翻转 261015
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N34 & 0xFF, ROCKPOS_N34 >> 8, 5},
+	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
+	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 
 	{Motor_Flex, MotorPart_REV, 30, 0, 3},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},

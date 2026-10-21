@@ -17,8 +17,16 @@
 #define Heat1_On() gpio_bit_reset(GPIOE, GPIO_PIN_11)
 #define Heat1_Off() gpio_bit_set(GPIOE, GPIO_PIN_11)
 
+extern uint8_t RedLight_Duty;
+
+#ifdef USE_REDLIGHT
+#define RedLight_On() timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_1, 100)
+#define RedLight_Off() timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_1, 0)
+#define RedLight_PWM(duty) timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_1, duty)
+#else
 #define Heat2_On() gpio_bit_reset(GPIOA, GPIO_PIN_7)
 #define Heat2_Off() gpio_bit_set(GPIOA, GPIO_PIN_7)
+#endif
 
 #if (LEG_COM == 0 && ROLLER_CALVES_EN) 
 #define CalfKnead_Pwm(dyty) timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_2, dyty);

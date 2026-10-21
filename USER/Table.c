@@ -672,11 +672,9 @@ const CoreMixOtherTabItem_t Table_Auto4[] = {
 //@ 泰式拉筋
 const CoreMixOtherTabItem_t Table_Auto5[] = {
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
-#ifdef USE_M2
-	{Part_SUB, 0, SUBTB_STR6, 0, 0}, // * Stretch6
-#else
+
+	// {Part_SUB, 0, SUBTB_STR6, 0, 0}, // todo rm Stretch6 拉伸不用 STR6 261011
 	{Part_SUB, 0, SUBTB_STR1, 0, 0}, // * Stretch1
-#endif
 	{Part_SUB, 0, SUBTB_STR5, 0, 0}, // * Stretch5
 
 	{Motor_Zero, MotorPart_Stretch, DDG_BCircle_Zero2, DDG_LCircle_Zero2, 0},

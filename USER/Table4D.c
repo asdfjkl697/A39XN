@@ -117,7 +117,9 @@ const CoreMixOtherTabItem_t Table_Reset[] = {
 
 	{Part_ASSIGN, ASSIGN_Mark, 0, 0, EXEC_TurnOn}, // todo 开机复位完成 260129
 
-#ifdef USE_M2
+#ifdef USE_M2_4D
+	{MoveDw_Tread, TREAD_FIX_CIRCLE, 140, 0, 5}, // todo md 260127
+#elif defined USE_M2
 	{MoveDw_Tread, TREAD_FIX_CIRCLE, 168, 0, 5}, // todo md 260127
 #endif
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH5, 0, 3},
@@ -672,7 +674,7 @@ const CoreMixOtherTabItem_t Table_Auto4[] = {
 //@ 泰式拉筋
 const CoreMixOtherTabItem_t Table_Auto5[] = {
 	{Motor_Calf, MotorPart_STOP, 0, 0, 0},
-	{Part_SUB, 0, SUBTB_STR1, 0, 0}, // * Stretch1
+	{Part_SUB, 0, SUBTB_STR6, 0, 0}, // todo Stretch6 261011
 	{Part_SUB, 0, SUBTB_STR2, 0, 0}, // * Stretch2
 
 	{Motor_Zero, MotorPart_Stretch, DDG_BCircle_Zero2, DDG_LCircle_Zero2, 0},
@@ -725,6 +727,7 @@ const CoreMixOtherTabItem_t Table_Auto5[] = {
 	{Part_AIR, PartCon_Run, FA_GAS_Full, 0, 0},
 
 	//*  变速拍 往下
+	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 2},
 	{MoveUp_Tap, FLAP_BS, 30, 30, 0x95},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 2},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
@@ -736,7 +739,7 @@ const CoreMixOtherTabItem_t Table_Auto5[] = {
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H6, 0, 2},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
 
-	{Part_SUB, 0, SUBTB_BackMaB, 0, 0}, // * 背部2 251109
+// {Part_SUB, 0, SUBTB_BackMaB, 0, 0}, // * 背部2 251109
 #ifndef USE_M2
 	{Part_SUB, 0, SUBTB_HIPC, 0, 0},
 #endif

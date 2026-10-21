@@ -94,17 +94,29 @@ typedef struct
 		uint8_t Circle_H8; // 圈数高8位 0~x  当State ：3 4 相对位置  ； 5：绝对位置（缩到底零点） 6 无效
 	} Flex;
 
+	// 翻转电机
+	struct
+	{
+		uint8_t State : 4; // 0:停止 1：缩 2：伸 3：缩多少圈 4：伸多少圈 5:指定位置
+		uint8_t Speed : 4; //
+		uint8_t Circle_L8; // 圈数低8位 0~x  当State ：3 4 相对位置  ； 5：绝对位置（缩到底零点）
+		uint8_t Circle_H8; // 圈数高8位 0~x  当State ：3 4 相对位置  ； 5：绝对位置（缩到底零点）
+	} Rock;
+
+	struct
+	{
+		uint8_t State;
+	} Led;
+
 } LegDataTx_S;
 
 // 小腿发送数据
 
 typedef struct
 {
-
 	// 滚轮电机
 	struct
 	{
-
 		uint8_t State;		// 0:停止 1：正转中 2：反转中 3.完成当前动作  （主板发送获取命令）
 		uint8_t Current_L8; // 电流低8位 mA
 		uint8_t Current_H8; // 电流高8位 mA
@@ -138,15 +150,23 @@ typedef struct
 	// 伸缩电机
 	struct
 	{
-
 		uint8_t State : 4;	  // 0:停止 1：伸出 2：回缩 3：完成    （主板发送获取命令）
 		uint8_t Place : 4;	  // 当前位置 0：有伸出 1：伸到顶 2：缩到底 。。。
 		uint8_t CurCircle_L8; // 当前圈数 低8位
 		uint8_t CurCircle_H8; // 当前圈数 高8位
 		uint8_t Current_L8;	  // 电流低8位 mA
 		uint8_t Current_H8;	  // 电流高8位 mA
-
 	} Flex;
+
+	struct
+	{
+		uint8_t State : 4;	  // 0:停止 1：往上 2：往下 3：完成    （主板发送获取命令）
+		uint8_t Place : 4;	  // 当前位置 0：有伸出 1：往上到最小 2：往下到最大
+		uint8_t CurCircle_L8; // 当前圈数 低8位
+		uint8_t CurCircle_H8; // 当前圈数 高8位
+		uint8_t Current_L8;	  // 电流低8位 mA
+		uint8_t Current_H8;	  // 电流高8位 mA
+	} Rock;
 
 	// 加热
 	struct

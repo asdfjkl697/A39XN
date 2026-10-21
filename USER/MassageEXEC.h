@@ -20,6 +20,14 @@ typedef enum
 
 typedef enum
 {
+    FootRock_STOP = 0, // 翻转停⽌, para1,para2,speed⽆效
+    FootRock_FIXED,    // 以当前位置正转指定圈数，para1, para2合并圈数, speed有效
+    FootRock_2POS,     // 2点循环
+    FootRock_END,
+} RockPartCmd;
+
+typedef enum
+{
     MotorT_Back = Motor_Back - Motor_Back,
     MotorT_Leg = Motor_Leg - Motor_Back,
     MotorT_Flex = Motor_Flex - Motor_Back,

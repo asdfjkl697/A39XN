@@ -294,7 +294,12 @@ void WorkStateProcess(void)
 		{
 		case 0:
 #if (LEG_COM)
+#ifdef USE_FOOT_ROCK
+			if ((GetLegDataRx()->Flex.Place == 2 && LegRockIsAtPosition(ROCKPOS_N2)) ||
+				TICK_COUNTER(Work.Tick, TIMEOUT_60S))
+#else
 			if (GetLegDataRx()->Flex.Place == 2 || TICK_COUNTER(Work.Tick, TIMEOUT_60S))
+#endif
 			{
 				FootFlexStateSet(FlexStop);
 				// DDG_Set_SitUp();
@@ -524,6 +529,11 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		if (nLigntSw)
 		{
 			LED1_ON();
+#ifdef USE_REDLIGHT
+			RedLight_PWM(RedLight_Duty); // todo test 261015
+#else
+			Heat3_On(RedLight_Duty);
+#endif
 #ifdef LED2_PWM
 			LED2_PWM_Flag = 1;
 #else
@@ -578,6 +588,11 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		nPowerOn = 0;
 		KeyPush.WiseKeyState = 0; // @ 开关机都要把这个标志位清零 250304
 		LED1_OFF();
+#ifdef USE_REDLIGHT
+		RedLight_Off(); // todo test 261015
+#else
+		Heat3_Off(); // todo test 261015
+#endif
 #ifdef LED2_PWM
 		LED2_PWM_Flag = 0;
 #else
@@ -598,6 +613,10 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		if (nparam == 0)
 		{
 			DDG_Set_Stop();
+// todo add 翻转复位 和小腿伸缩一起 261015
+#ifdef USE_FOOT_ROCK
+			LegRockMoveToPosition(ROCKPOS_N2, 5);
+#endif
 #if (LEG_COM)
 			FootFlexStateSet(FlexUp); // 先缩小腿
 			FootFlexSpeedSet(5);
@@ -648,6 +667,11 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		else
 		{
 			LED1_OFF(); // * 空闲状态熄灯
+#ifdef USE_REDLIGHT
+			RedLight_Off(); // todo test 261015
+#else
+			Heat3_Off(); // todo test 261015
+#endif
 #ifdef LED2_PWM
 			LED2_PWM_Flag = 0;
 #else

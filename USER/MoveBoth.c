@@ -633,7 +633,9 @@ void MoveUp_Manual_Area_Deal(void)
 #endif
 		break;
 	case Area_Full:
-#ifdef USE_M2
+#ifdef USE_M2_4D
+		Part_Date_Set(MoveUp_Tread, 1, TREAD_BACK_AND_FORTH, 15, 60, speed);
+#elif defined USE_M2
 		Part_Date_Set(MoveUp_Tread, 1, TREAD_BACK_AND_FORTH, 15, 65, speed);
 #else
 		Part_Date_Set(MoveUp_Tread, 1, TREAD_BACK_AND_FORTH, 15, 100, speed);

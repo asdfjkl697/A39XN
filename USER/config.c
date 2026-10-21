@@ -211,9 +211,12 @@ void Heat_IO_Config(void)
 	gpio_bit_set(GPIOE, GPIO_PIN_11);
 
 	/*************Heat2***********/
+#ifdef USE_REDLIGHT
+	gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
+#else
 	gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_7);
 	gpio_bit_set(GPIOA, GPIO_PIN_7);
-
+#endif
 	/*************Heat3***********/
 	gpio_init(GPIOB, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0);
 
@@ -226,19 +229,28 @@ void Heat_IO_Config(void)
 
 void Heat_PWM_Config(void)
 {
-	/* TIMER2 configuration: generate PWM signals with different duty cycles:
-	   TIMER0CLK = SystemCoreClock / 120 = 1MHz */
+	/* TIMER2 clock is 120MHz: PSC=119 gives a 1MHz counter clock. */
 	timer_oc_parameter_struct timer_ocintpara;
 	timer_parameter_struct timer_initpara;
 
 	rcu_periph_clock_enable(RCU_TIMER2);
 	timer_deinit(TIMER2);
 
-	/* TIMER0 configuration */
+	/* Select 10kHz, 5kHz, or 1kHz; PWM period remains 100 timer counts. */
+#if defined(USE_REDLIGHT_1KHZ)
+	timer_initpara.prescaler = 1199;
+#elif defined(USE_REDLIGHT_2KHZ)
+	timer_initpara.prescaler = 599;
+#elif defined(USE_REDLIGHT_5KHZ)
+	timer_initpara.prescaler = 239;
+#elif defined(USE_REDLIGHT_500HZ)
+	timer_initpara.prescaler = 2399;
+#else
 	timer_initpara.prescaler = 119;
+#endif
 	timer_initpara.alignedmode = TIMER_COUNTER_EDGE;	// 对齐
 	timer_initpara.counterdirection = TIMER_COUNTER_UP; // 向上计数
-	timer_initpara.period = 99;							// 10kHz
+	timer_initpara.period = 99;
 	timer_initpara.clockdivision = TIMER_CKDIV_DIV1;
 	timer_initpara.repetitioncounter = 0;
 	timer_init(TIMER2, &timer_initpara);
@@ -250,6 +262,13 @@ void Heat_PWM_Config(void)
 	timer_ocintpara.ocnpolarity = TIMER_OCN_POLARITY_HIGH;
 	timer_ocintpara.ocidlestate = TIMER_OC_IDLE_STATE_LOW;
 	timer_ocintpara.ocnidlestate = TIMER_OCN_IDLE_STATE_LOW;
+#ifdef USE_REDLIGHT
+	timer_channel_output_config(TIMER2, TIMER_CH_1, &timer_ocintpara);
+	timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_1, 0);
+	timer_channel_output_mode_config(TIMER2, TIMER_CH_1, TIMER_OC_MODE_PWM0);
+	timer_channel_output_shadow_config(TIMER2, TIMER_CH_1, TIMER_OC_SHADOW_DISABLE);
+	timer_channel_output_polarity_config(TIMER2, TIMER_CH_1, TIMER_OC_POLARITY_LOW);
+#endif
 	timer_channel_output_config(TIMER2, TIMER_CH_2, &timer_ocintpara);
 
 	timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_2, 0);

@@ -101,7 +101,11 @@ typedef enum //* 增加 250124
 
 // #define DefaultLanguage 20
 // #define DefaultLanguage 0x0f
-#define DefaultLanguage 0x0 // @ md 260122
+#ifdef A395SY
+#define DefaultLanguage 0x7
+#else
+#define DefaultLanguage 0x0
+#endif
 
 typedef enum
 {

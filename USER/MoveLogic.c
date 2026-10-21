@@ -108,8 +108,8 @@ u8 AutoPro_Flex_Adjust_M2(u8 flexpara) //* 上机芯伸缩矫正 250926
 	u16 intentemp;
 
 	inten = flexpara;
-	if (inten > 48)
-		inten = 48;
+	if (inten > 60) // TODO 修改限制 261011
+		inten = 60;
 #ifdef FLEX_WEAK
 	flex_weak = FLEX_WEAK;
 #endif
