@@ -2,6 +2,7 @@
 #include "Table.h"
 #include "Memory.h"
 #include "MassageLogic.h"
+#include "Heat.h"
 
 /* Timeout constants (milliseconds for TICK_COUNTER) */
 #define TIMEOUT_1S 1000
@@ -530,9 +531,9 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		{
 			LED1_ON();
 #ifdef USE_REDLIGHT
-			RedLight_PWM(RedLight_Duty); // todo test 261015
+			RedLight_PWM(RedLight_DutyToPwm(RedLight_Duty)); // todo test 261015
 #else
-			Heat3_On(RedLight_Duty);
+			Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
 #endif
 #ifdef LED2_PWM
 			LED2_PWM_Flag = 1;
@@ -588,15 +589,16 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		nPowerOn = 0;
 		KeyPush.WiseKeyState = 0; // @ 开关机都要把这个标志位清零 250304
 		LED1_OFF();
-#ifdef USE_REDLIGHT
-		RedLight_Off(); // todo test 261015
-#else
-		Heat3_Off(); // todo test 261015
-#endif
 #ifdef LED2_PWM
 		LED2_PWM_Flag = 0;
 #else
 		LED2_OFF();
+#endif
+
+#ifdef USE_REDLIGHT
+		RedLight_Off(); // todo test 261015
+#else
+		Heat3_Off(); // todo test 261015
 #endif
 
 #if (LEG_COM)

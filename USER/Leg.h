@@ -33,10 +33,12 @@ typedef enum
 #define ROCKPOS_MAX 480
 #define ROCK_STATE_POSITION 5
 extern uint16_t Rock_Tab[6];
+extern u8 FootSwing_Level;
 void LegRock_Updata(void);
 void LegRockMoveToPosition(u16 position, u8 speed);
 u8 LegRockIsAtPosition(u16 position);
 void LegRockManualStateSet(u8 state, u8 speed);
+void LegRockSwingSet(u8 level);
 #endif
 
 void LegInit(void);

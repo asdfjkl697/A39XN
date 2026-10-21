@@ -169,6 +169,10 @@ void MotorPart_Date_Set(u8 motorpart, u8 para0, u8 method, u8 para1, u8 para2, u
 {
 	if (motorpart >= Part_Max || motorpart < Motor_Back)
 		return;
+#ifdef USE_FOOT_ROCK
+	if (motorpart == Motor_Rock && KeyPush.RockKeyState != 0)
+		return;
+#endif
 	MotorT_Work.RunFlag[motorpart - Motor_Back] = 1;
 	MotorT_Work.Cmd[motorpart - Motor_Back] = method;
 	MotorT_Work.Para1[motorpart - Motor_Back] = para1;

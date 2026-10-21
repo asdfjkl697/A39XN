@@ -93,6 +93,8 @@ typedef enum
     Key_Volume_Set,
 
     Key_FootRock = 0x60, // @ add 261015
+    Key_FootSwing,
+    Key_RedLight,
 
     Key_WakeUp = 200,
     Key_BackUpDown,

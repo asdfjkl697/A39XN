@@ -48,37 +48,39 @@ HandlerKeyMap_t KeyMap[] = {
 	{0x1D, Key_Zero, 0xFF},				/* 零重力档位 */
 	{0x1E, Key_LegsUpDown, 0xFF},		/* 小腿升降 */
 	{0x1F, Key_LegsFlex, 0xFF},			/* 小腿伸缩 */
-	// {0x20, Key_Lying, 0xFF},			/* 联动起座 */
-	{0x20, Key_FootRock, 0xFF},		/* 足底翻转 */
-	{0x21, Key_BackUpDown, 0xFF},	/* 靠背升降 */
-	{0x22, Key_Memory_Save, 0xFF},	/* 存储1~4 */
-	{0x23, Key_Memory_Use, 0xFF},	/* 调用1~4 */
-	{0x24, key_Light, 0xFF},		/* LED开关 */
-	{0x25, Key_Volume_Set, 0xFF},	/* 音量设置*/
-	{0x26, Key_Volume, 0xFF},		/* 音量加减 */
-	{0x27, Key_Language, 0xFF},		/* 语音 1~2 */
-	{0x28, Key_Health, 0xFF},		/* 体型检测开始、退出 1：开始检测 2：退出检测 */
-	{0x29, key_DeviceInf, 0xFF},	/* 产品信息查询 */
-	{0x2A, Key_Player, 0xFF},		/* 语音播报开关 */
-	{0x2B, Key_TimOutReset, 0xFF},	/* 按摩时间到后椅子自动复位 */
-	{0x2C, Key_LC, 0x10},			/* 整机老化 */
-	{0x2D, Key_PACK, 0x11},			/* 打包模式 */
-	{0x2E, Key_FCT, 0x12},			/* 工程模式 */
-	{0x30, key_DevInfOk, 0xFF},		/* 产品信息查询完成 */
-	{0x32, key_Error, 0xFF},		/* 产品信息查询完成 */
-	{0x33, key_DiyWork, 0xFF},		/* 自定义执行 */
-	{0x36, Key_4DIntensity, 0xFF},	/* 4D强度 */
-	{0x37, Key_MassSpeed, 0xFF},	/* 速度 */
-	{0x38, Key_MassWidth, 0xFF},	/* 宽度 */
-	{0x39, Key_AirIntensity, 0xFF}, /* 气压强度 */
-	{0x40, key_Recovery, 0xFF},		/* 恢复出产设置 */
-	{0x44, Key_SoundWavex, 0xFF},	/* 音波设置 */
-	{0x45, Key_SoundWave, 0xFF},	/* 音波加减 */
-	{0x46, Key_SoundWaveSW, 0xFF},	/* 音波开关 */
-	{0x47, Key_SoundUpDown, 0xFF},	/* 音波加减 */
-	{0x48, Key_SoundMusicSW, 0xFF}, /* 音乐开关 */
-	{0x4D, Key_LowPower, 0xFF},		/* 低功耗 */
-	{0xB0, key_SOUND_ACK, 0xFF},	/* 应答声 */
+	{0x20, Key_Lying, 0xFF},			/* 联动起座 */
+	{0x21, Key_BackUpDown, 0xFF},		/* 靠背升降 */
+	{0x22, Key_Memory_Save, 0xFF},		/* 存储1~4 */
+	{0x23, Key_Memory_Use, 0xFF},		/* 调用1~4 */
+	{0x24, key_Light, 0xFF},			/* LED开关 */
+	{0x25, Key_Volume_Set, 0xFF},		/* 音量设置*/
+	{0x26, Key_Volume, 0xFF},			/* 音量加减 */
+	{0x27, Key_Language, 0xFF},			/* 语音 1~2 */
+	{0x28, Key_Health, 0xFF},			/* 体型检测开始、退出 1：开始检测 2：退出检测 */
+	{0x29, key_DeviceInf, 0xFF},		/* 产品信息查询 */
+	{0x2A, Key_Player, 0xFF},			/* 语音播报开关 */
+	{0x2B, Key_TimOutReset, 0xFF},		/* 按摩时间到后椅子自动复位 */
+	{0x2C, Key_LC, 0x10},				/* 整机老化 */
+	{0x2D, Key_PACK, 0x11},				/* 打包模式 */
+	{0x2E, Key_FCT, 0x12},				/* 工程模式 */
+	{0x30, key_DevInfOk, 0xFF},			/* 产品信息查询完成 */
+	{0x32, key_Error, 0xFF},			/* 产品信息查询完成 */
+	{0x33, key_DiyWork, 0xFF},			/* 自定义执行 */
+	{0x36, Key_4DIntensity, 0xFF},		/* 4D强度 */
+	{0x37, Key_MassSpeed, 0xFF},		/* 速度 */
+	{0x38, Key_MassWidth, 0xFF},		/* 宽度 */
+	{0x39, Key_AirIntensity, 0xFF},		/* 气压强度 */
+	{0x40, key_Recovery, 0xFF},			/* 恢复出产设置 */
+	{0x44, Key_SoundWavex, 0xFF},		/* 音波设置 */
+	{0x45, Key_SoundWave, 0xFF},		/* 音波加减 */
+	{0x46, Key_SoundWaveSW, 0xFF},		/* 音波开关 */
+	{0x47, Key_SoundUpDown, 0xFF},		/* 音波加减 */
+	{0x48, Key_SoundMusicSW, 0xFF},		/* 音乐开关 */
+	{0x49, Key_FootRock, 0xFF},			/* 足底翻转 */
+	{0x4D, Key_LowPower, 0xFF},			/* 低功耗 */
+	{0x51, Key_FootSwing, 0xFF},		/* 足底摇摆 */
+	{0x66, Key_RedLight, 0xFF},			/* 红光 */
+	{0xB0, key_SOUND_ACK, 0xFF},		/* 应答声 */
 };
 
 #define KeyMapNum sizeof(KeyMap) / sizeof(KeyMap[0])

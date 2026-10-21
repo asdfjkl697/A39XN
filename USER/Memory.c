@@ -1,6 +1,7 @@
 #include "Memory.h"
 #include "MoveLogic.h"
 #include "fmc.h" //* 增加
+#include "Heat.h"
 // 记忆模式
 
 static Union_Save Union_Save_Value[Max_Save];
@@ -131,6 +132,7 @@ uint32_t Part_USE_Get(u8 cnt)
 void Flash_Parameter_read(void)
 {
     // u8 i;
+    uint16_t red_light_duty;
     GDFLASH_Read(SYSTEM_PARA_ADDR, Flash_Parameter_Buf, Max_Flash_Parameter + 2);
 
     if (Flash_Parameter_Buf[Max_Flash_Parameter] == 0x5aa5 &&
@@ -149,10 +151,14 @@ void Flash_Parameter_read(void)
             nVolume_SoundWave = 9;
 #endif
         Memorystate = Flash_Parameter_Buf[8] & 0x0f; //* add
+        RedLight_Duty = Flash_Parameter_Buf[9];
+        if (RedLight_Duty > 4)
+            RedLight_Duty = 4;
     }
     else
     {
         nVolume = 8;
+        RedLight_Duty = 3;
 #ifdef USE_SOUNDWAVE
         nVolume_SoundWave = 9;
 #endif
@@ -182,8 +188,8 @@ void Flash_Parameter_Write(void)
 #ifdef USE_SOUNDWAVE
         nVolume_SoundWave != Flash_Parameter_Buf[5] ||
 #endif
-        Memorystate != Flash_Parameter_Buf[8] //* add
-    )
+        Memorystate != Flash_Parameter_Buf[8] || //* add
+        RedLight_Duty != Flash_Parameter_Buf[9])
     {
         Flash_Parameter_Buf[1] = UnionState_Flash.Strack;
         Flash_Parameter_Buf[2] = nVolume;
@@ -193,6 +199,7 @@ void Flash_Parameter_Write(void)
         Flash_Parameter_Buf[5] = nVolume_SoundWave;
 #endif
         Flash_Parameter_Buf[8] = Memorystate; //* add
+        Flash_Parameter_Buf[9] = RedLight_Duty;
 
         // Flash_Parameter_Buf[52] = PwrLowModeFlag;
         // Flash_Parameter_Buf[53] = nScreen;

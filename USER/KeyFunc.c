@@ -6,6 +6,7 @@
 #include "Table.h"
 #include "MassageLogic.h"
 #include "Leg.h"
+#include "Heat.h"
 
 KeyFunc_S Key;
 
@@ -216,7 +217,7 @@ void KeyPowerScan(void) //* 100ms
         Buzzer_Ararm &= 0xdf;
 
     // todo add 261015
-    if ((KeyPush.RockKeyState && GetLegDataRx()->Rock.Place > 0) ||
+    if (((KeyPush.RockKeyState == 1 || KeyPush.RockKeyState == 2) && GetLegDataRx()->Rock.Place > 0) ||
 #ifdef USE_FOOT_ROCK
         (KeyPush.RockKeyState == 2 &&
          (((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < ROCK_DEF_LEG + 9) ||
@@ -475,6 +476,7 @@ void KeyFunc(void)
 #ifdef USE_FOOT_ROCK
             if (Key.Param == 1 || Key.Param == 2)
             {
+                LegRockSwingSet(0);
                 KeyPush.RockKeyState = Key.Param;
                 LegRockManualStateSet(Key.Param, 5);
             }
@@ -581,6 +583,7 @@ void KeyFunc(void)
             break;
         case key_Recovery: // * 增加 250617
             nVolume = 8;
+            RedLight_Duty = 3; // todo add 261021
 #ifdef USE_SOUNDWAVE
             nVolume_Real = 8;
             nVolume_SoundWave = 9;
@@ -789,13 +792,32 @@ void KeyFunc(void)
 #ifdef USE_SOUNDWAVE
             nVolume_Real = nVolume;
 #endif
-            RedLight_Duty = nVolume * 10; // todo test 261016
-            if (RedLight_Duty > 100)
-                RedLight_Duty = 100;
+            Flash_Parameter_Write();
+            // Flash_Check_Tick = Flash_Check_Time;
+            break;
+
+        case Key_RedLight:
+            if (Key.Param == 0xF0)
+            {
+                if (RedLight_Duty == 0 || RedLight_Duty >= 4)
+                    RedLight_Duty = 1;
+                else
+                    RedLight_Duty++;
+            }
+            else if (Key.Param <= 4)
+            {
+                RedLight_Duty = Key.Param;
+            }
+            else
+            {
+                Buzzer = SOUND_ALARM;
+                break;
+            }
+
 #ifdef USE_REDLIGHT
-            RedLight_PWM(RedLight_Duty); // todo test 261015
+            RedLight_PWM(RedLight_DutyToPwm(RedLight_Duty));
 #else
-            Heat3_On(RedLight_Duty);
+            Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
 #endif
             Flash_Parameter_Write();
             // Flash_Check_Tick = Flash_Check_Time;
@@ -906,8 +928,31 @@ void KeyFunc(void)
             break;
 
         case Key_FootRock:
-            KeyPush.RockKeyState = 0;
-            LegRockManualStateSet(0, 0);
+            if (KeyPush.RockKeyState == 1 || KeyPush.RockKeyState == 2)
+            {
+                KeyPush.RockKeyState = 0;
+                LegRockManualStateSet(0, 0);
+            }
+            break;
+
+        case Key_FootSwing:
+#ifdef USE_FOOT_ROCK
+            if (WorkStateGet() != WorkState_Work)
+            {
+                Buzzer = SOUND_ALARM;
+                break;
+            }
+            if (Key.Param == 0xF0)
+                LegRockSwingSet(FootSwing_Level >= 4 ? 1 : FootSwing_Level + 1);
+            else if (Key.Param <= 4)
+                LegRockSwingSet(Key.Param);
+            else
+            {
+                Buzzer = SOUND_ALARM;
+                break;
+            }
+            Buzzer = SOUND_ACK;
+#endif
             break;
 
         case Key_BackTread:
@@ -2247,9 +2292,9 @@ void KeyFunc(void)
                     Light_Params_Set(4, 255, 255, 255, 2);
                     LED1_ON();
 #ifdef USE_REDLIGHT
-                    RedLight_PWM(RedLight_Duty); // todo test 261015
+                    RedLight_PWM(RedLight_DutyToPwm(RedLight_Duty));
 #else
-                    Heat3_On(RedLight_Duty);
+                    Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
 #endif
 #ifdef LED2_PWM
                     LED2_PWM_Flag = 1;
@@ -2262,9 +2307,9 @@ void KeyFunc(void)
                     Light_Params_Set(0, 0, 0, 0, 0);
                     LED1_OFF();
 #ifdef USE_REDLIGHT
-                    RedLight_Off(); // todo test 261015
+                    RedLight_Off();
 #else
-                    Heat3_Off(); // todo test 261015
+                    Heat3_Off();
 #endif
 #ifdef LED2_PWM
                     LED2_PWM_Flag = 0;

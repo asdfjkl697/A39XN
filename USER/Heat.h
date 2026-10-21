@@ -18,6 +18,7 @@
 #define Heat1_Off() gpio_bit_set(GPIOE, GPIO_PIN_11)
 
 extern uint8_t RedLight_Duty;
+uint8_t RedLight_DutyToPwm(uint8_t level);
 
 #ifdef USE_REDLIGHT
 #define RedLight_On() timer_channel_output_pulse_value_config(TIMER2, TIMER_CH_1, 100)

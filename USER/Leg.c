@@ -10,6 +10,7 @@ Leg_State_t Leg_State;
 #ifdef USE_FOOT_ROCK
 
 uint16_t Rock_Tab[6] = {ROCKPOS_N0, ROCKPOS_N1, ROCKPOS_N2, ROCKPOS_N3, ROCKPOS_N4, ROCKPOS_N5};
+u8 FootSwing_Level;
 
 static u8 LegRock_Init_Success = 0;
 static u8 LegRockLoopActive = 0;
@@ -60,8 +61,36 @@ void LegRockManualStateSet(u8 state, u8 speed)
 	LegRockLoopActive = 0;
 	MotorT_Work.RunFlag[MotorT_Rock] = 0;
 	MotorT_Work.RunTime[MotorT_Rock] = 0;
+	FootSwing_Level = 0;
 	LegTx.Rock.State = state;
 	LegTx.Rock.Speed = state ? speed : 0;
+}
+
+void LegRockSwingSet(u8 level)
+{
+	static const u8 position_pairs[] = {0x21, 0x31, 0x41, 0x40};
+
+	if (level > 4)
+		return;
+
+	LegRockLoopActive = 0;
+	MotorT_Work.RunTime[MotorT_Rock] = 0;
+	FootSwing_Level = level;
+	KeyPush.RockKeyState = level ? 3 : 0;
+
+	if (level == 0)
+	{
+		MotorT_Work.RunFlag[MotorT_Rock] = 0;
+		LegTx.Rock.State = 0;
+		LegTx.Rock.Speed = 0;
+		return;
+	}
+
+	MotorT_Work.Cmd[MotorT_Rock] = FootRock_2POS;
+	MotorT_Work.Para1[MotorT_Rock] = position_pairs[level - 1];
+	MotorT_Work.Para2[MotorT_Rock] = 0xFF;
+	MotorT_Work.Para3[MotorT_Rock] = 0x21;
+	MotorT_Work.RunFlag[MotorT_Rock] = 1;
 }
 
 static u8 LegRockLoopStart(void)
@@ -132,7 +161,7 @@ static void LegRockLoopUpdate(void)
 			 ++MotorT_Work.RunTime[MotorT_Rock] >= LegRockLoopSecondDwellTicks)
 	{
 		MotorT_Work.RunTime[MotorT_Rock] = 0;
-		if (--LegRockLoopCyclesLeft == 0)
+		if (LegRockLoopCyclesLeft != 0xFF && --LegRockLoopCyclesLeft == 0)
 		{
 			LegTx.Rock.State = 0;
 			MotorT_Work.RunFlag[MotorT_Rock] = 0;
@@ -150,6 +179,14 @@ void LegRock_Updata(void)
 {
 	if (KeyPush.RockKeyState != 0)
 	{
+		if (KeyPush.RockKeyState == 3)
+		{
+			if (MotorT_Work.RunFlag[MotorT_Rock] &&
+				MotorT_Work.Cmd[MotorT_Rock] == FootRock_2POS)
+				LegRockLoopUpdate();
+			return;
+		}
+
 		if (((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < ROCK_DEF_LEG + 9) ||
 			 DDG_Get_LnCurCircle < ROCK_DEF_LEG) &&
 			KeyPush.RockKeyState == 2)
