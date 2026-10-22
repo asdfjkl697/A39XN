@@ -508,6 +508,9 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 	switch (ntype)
 	{
 	case UserFunc_PowerOn:
+#ifdef USE_FOOT_ROCK
+		LegRockSwingSet(0);
+#endif
 		if (MChair.CFG.Bit.CoreReset)
 		{
 			Core_RestSuccess = 0;		  // * 增加 250516
@@ -530,22 +533,25 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		if (nLigntSw)
 		{
 			LED1_ON();
-#ifdef USE_REDLIGHT
-			RedLight_PWM(RedLight_DutyToPwm(RedLight_Duty)); // todo test 261015
-#else
-			Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
-#endif
 #ifdef LED2_PWM
 			LED2_PWM_Flag = 1;
 #else
 			LED2_ON();
 #endif
 		}
+#ifdef USE_REDLIGHT
+		RedLight_PWM(RedLight_DutyToPwm(RedLight_Duty)); // todo test 261015
+#else
+		Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
+#endif
 		break;
 
 	case UserFunc_PowerOff:
 
 		Memorystate &= 0x0f; // * 增加 取消调用显示 250617
+#ifdef USE_FOOT_ROCK
+		LegRockSwingSet(0);
+#endif
 #ifdef USE_SOUNDWAVE
 		Flash_Parameter_read(); // todo 读取存储值 主要为了音波 260707
 #endif
@@ -632,14 +638,6 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 			DDG_Set_Stop();
 			Work.CurState = WorkState_Reset;
 			ResetStep = 2; // @ 1-2 修改 260421
-
-			// Work.CurState = WorkState_Wait; // * 直接黑屏 等机芯复位
-			// if (0x03 == Core_RestSuccess)
-			// {
-			// 	Core_RestSuccess = 0;
-			// 	MChair.CFG.Bit.CoreReset = 0;
-			// 	Work.CurState = WorkState_Wait;
-			// }
 		}
 		break;
 

@@ -89,7 +89,7 @@ int main(void)
     ota_init();
     UserConfig();
     AirInit();
-#ifdef USE_AIRSENSOR
+#if defined(USE_AIRSENSOR) || defined(USE_S0558)
     AirSensor_Init(); // todo add 260629
 #endif
     Motor_Work_Iint(); // * add 251010
@@ -134,7 +134,7 @@ int main(void)
 
         KeyCom_Handler(); /* 手控器接收数据 */
 
-#ifdef USE_AIRSENSOR
+#if defined(USE_AIRSENSOR) || defined(USE_S0558)
         AirSensor_Handler(); // todo add 260629
 #endif
 

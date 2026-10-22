@@ -289,6 +289,7 @@ void LegInit(void)
 	memset(&LegRx, 0, sizeof(LegDataRx_S));
 	memset(&LegTx, 0, sizeof(LegDataTx_S));
 #ifdef USE_FOOT_ROCK
+	FootSwing_Level = 0;
 	LegRock_Init_Success = 0;
 	LegRockMoveToPosition(ROCKPOS_N2, 5);
 #endif

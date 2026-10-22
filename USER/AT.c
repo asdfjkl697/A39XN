@@ -233,6 +233,14 @@ void AT_TableHandle(AT_CMD_S *cmd_p, u8 tablenum)
 							 pAutoExeStepData->Para1, pAutoExeStepData->Para2, pAutoExeStepData->Para3);
 			break;
 
+		case Air_Del:
+			if (AirModeGet() == AirModeClose)
+				break;
+			if ((AirModeGet() == AirModeUpper || AirModeGet() == AirModeLower) && tablenum != Table_Air)
+				break;
+			AirPart_Del(pAutoExeStepData->Method);
+			break;
+
 		case Air_Refresh:
 			if (AirModeGet() < AirModeFull) //* 250917
 				break;

@@ -381,14 +381,13 @@
 #define ROLLER_CALVES_EN 1
 #define ROLLER_FOOT_EN 1
 #elif defined A396SYN_2
+#define ANKLE_AIR_WEAK 10
 #define FEET_AIR_WEAK 5
-#define CALF_AIR_WEAK 18 // @ 15-18 261019
-// #define USE_REDLIGHT // PA7 输出 TIMER2_CH_1 PWM
-// #define USE_REDLIGHT_1KHZ // TIMER2 PWM 测试频率切换为 1kHz
-// #define USE_REDLIGHT_5KHZ // TIMER2 红光 PWM 频率切换为 5kHz
+#define CALF_AIR_WEAK 20 // @ 15-18-22 261022
 #define USE_REDLIGHT_2KHZ
 #define USE_FOOT_ROCK
 #define USE_SOUNDWAVE
+#define USE_S0558
 #define USE_M2
 #define A390_ARMKEY
 #define ENGLISH_VOICE

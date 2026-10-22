@@ -799,12 +799,12 @@ void KeyFunc(void)
         case Key_RedLight:
             if (Key.Param == 0xF0)
             {
-                if (RedLight_Duty == 0 || RedLight_Duty >= 4)
-                    RedLight_Duty = 1;
+                if (RedLight_Duty >= 3)
+                    RedLight_Duty = 0;
                 else
                     RedLight_Duty++;
             }
-            else if (Key.Param <= 4)
+            else if (Key.Param <= 3)
             {
                 RedLight_Duty = Key.Param;
             }
@@ -819,8 +819,9 @@ void KeyFunc(void)
 #else
             Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
 #endif
+
             Flash_Parameter_Write();
-            // Flash_Check_Tick = Flash_Check_Time;
+            Buzzer = SOUND_ACK;
             break;
 
         case Key_Volume_Set:
@@ -943,7 +944,7 @@ void KeyFunc(void)
                 break;
             }
             if (Key.Param == 0xF0)
-                LegRockSwingSet(FootSwing_Level >= 4 ? 1 : FootSwing_Level + 1);
+                LegRockSwingSet(FootSwing_Level >= 4 ? 0 : FootSwing_Level + 1);
             else if (Key.Param <= 4)
                 LegRockSwingSet(Key.Param);
             else
@@ -974,23 +975,6 @@ void KeyFunc(void)
             break;
 
         case Key_FCT:
-
-            //            if (WorkStateGet() != WorkState_FCT)
-            //            {
-            //                if (!Key.Param )
-            //                {
-            //                    Enter_Fct();
-            //                    Buzzer = SOUND_ACK;
-            //                }
-            //                else
-            //                {
-            //                    Buzzer = SOUND_ALARM;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                Fct_Update(Key.Param );
-            //            }
 
             break;
 
@@ -1312,59 +1296,9 @@ void KeyFunc(void)
             break;
 
         case Key_UpperAir:
-            // if (AutoModeGet() > 0)
-            // {
-            //     Buzzer = SOUND_ALARM;
-            //     break;
-            // }
-            // if ((WorkStateGet() == WorkState_Work) || (WorkStateGet() == WorkState_WaitFunc))
-            // {
-            //     if (Key.Param == 1)
-            //     {
-            //         if (AirModeGet() == AirModeFull)
-            //             AirModeSet(AirModeClose);
-            //         else
-            //             AirModeSet(AirModeFull);
-            //     }
-            //     else if (Key.Param == 2)
-            //     {
-            //         if (AirModeGet() == AirModeUpper)
-            //             AirModeSet(AirModeClose);
-            //         else
-            //             AirModeSet(AirModeUpper);
-            //     }
-            //     else if (Key.Param == 3)
-            //     {
-            //         if (AirModeGet() == AirModeLower)
-            //             AirModeSet(AirModeClose);
-            //         else
-            //             AirModeSet(AirModeLower);
-            //     }
-            //     Buzzer = SOUND_ACK;
-            // }
             break;
 
         case Key_LowerAir:
-            // if (WorkStateGet() == WorkState_Work)
-            // {
-            //     if (Air_Stre_State > 0)
-            //     {
-            //         Buzzer = SOUND_ALARM;
-            //         break;
-            //     }
-
-            //     if (Key.Param  == 1)
-            //     {
-            //         nCurAirState |= Air_State_Leg;
-            //         AirModeSet((Air_State_Enum)nCurAirState);
-            //     }
-            //     else
-            //     {
-            //         nCurAirState &= ~Air_State_Leg;
-            //         AirModeSet((Air_State_Enum)nCurAirState);
-            //     }
-            //     Buzzer = SOUND_ACK;
-            // }
             return;
 
         case key_AutoLyJump:
@@ -2100,11 +2034,6 @@ void KeyFunc(void)
             Flash_Parameter_Write();
             break;
 
-            // case Key_language:
-            // 	if (WorkStateGet() == WorkState_FCT)
-            // 		return;
-            // 	return;
-
         case Key_WakeUp:
             if (WorkStateGet() == WorkState_FCT)
                 break;
@@ -2291,11 +2220,6 @@ void KeyFunc(void)
                 {
                     Light_Params_Set(4, 255, 255, 255, 2);
                     LED1_ON();
-#ifdef USE_REDLIGHT
-                    RedLight_PWM(RedLight_DutyToPwm(RedLight_Duty));
-#else
-                    Heat3_On(RedLight_DutyToPwm(RedLight_Duty));
-#endif
 #ifdef LED2_PWM
                     LED2_PWM_Flag = 1;
 #else
@@ -2306,11 +2230,6 @@ void KeyFunc(void)
                 {
                     Light_Params_Set(0, 0, 0, 0, 0);
                     LED1_OFF();
-#ifdef USE_REDLIGHT
-                    RedLight_Off();
-#else
-                    Heat3_Off();
-#endif
 #ifdef LED2_PWM
                     LED2_PWM_Flag = 0;
 #else

@@ -173,7 +173,6 @@ extern "C"
 	typedef union
 	{
 		uint8_t All;
-
 		struct
 		{
 			uint8_t LowPower : 1;		 /* 低功耗 */
@@ -186,6 +185,17 @@ extern "C"
 			uint8_t nSoundWaveState : 1; // @ add 260324
 		} Bit;
 	} Byte13_t;
+
+	typedef union
+	{
+		uint8_t All;
+		struct
+		{
+			uint8_t ChildLock : 1; // 童锁开关
+			uint8_t Res_Byte16 : 3;
+			uint8_t RedLightGear : 4; // 红光挡位
+		} Bit;
+	} Byte16_t;
 
 	/********************************************************
 	 * 手控器显示控制接口   参数字节
@@ -210,10 +220,11 @@ extern "C"
 
 		struct
 		{
-			uint8_t LedMode : 1;	 /* 设置LED灯 */
-			uint8_t BGM : 1;		 /* 背景音乐 */
-			uint8_t TimOutReset : 1; /* 自动复位 */
-			uint8_t Res : 5;
+			uint8_t LedMode : 1;	  /* 设置LED灯 */
+			uint8_t BGM : 1;		  /* 背景音乐 */
+			uint8_t TimOutReset : 1;  /* 自动复位 */
+			uint8_t AnkleRocking : 4; // 足踝摇摆挡位
+			uint8_t Res : 1;
 		} Bit;
 	} Byte27_t;
 
@@ -242,16 +253,14 @@ extern "C"
 
 		uint8_t MassageStrength; /* 设置按摩强度模式 0：轻揉 1：舒缓 2：强劲 */
 		uint8_t EorValue;		 /* 错误代码 */
-		uint8_t IDCode1;		 /* 序列号第1个8位 */
-		uint8_t IDCode2;		 /* 序列号第2个8位 */
-		uint8_t IDCode3;		 /* 序列号第3个8位 */
-		uint8_t IDCode4;		 /* 序列号第4个8位 */
-		uint8_t WiseValue;		 /* 设置手法 */
-		uint8_t HeartRate;		 /* 心率 */
-		uint8_t Sop2;			 /* 血氧 */
-		uint8_t MicLoop;		 /* 微循环 */
-		uint8_t TiredStat;		 /* 疲劳等级 */
-		uint8_t CountDown;		 /* 疲劳检测进度条 0-30 */
+		Byte16_t Byte16;
+		uint8_t Res_4[3];  // @ 保留字节
+		uint8_t WiseValue; /* 设置手法 */
+		uint8_t HeartRate; /* 心率 */
+		uint8_t Sop2;	   /* 血氧 */
+		uint8_t MicLoop;   /* 微循环 */
+		uint8_t TiredStat; /* 疲劳等级 */
+		uint8_t CountDown; /* 疲劳检测进度条 0-30 */
 
 		Byte26_t Byte26; /* 设置语音播报和音量 */
 

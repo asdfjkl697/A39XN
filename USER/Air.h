@@ -229,4 +229,5 @@ extern void Gas_Clear(void);
 
 extern void Gas_Keep_Set(u8 method);
 extern void AirT_100ms_Deal(void);
+extern void AirPart_Del(u8 airpart);
 #endif

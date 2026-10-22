@@ -27,7 +27,7 @@
 
 #include "MoveBoth.h"
 
-#ifdef USE_AIRSENSOR
+#if defined(USE_AIRSENSOR) || defined(USE_S0558)
 #include "AirSensor.h"
 #endif
 

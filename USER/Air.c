@@ -651,3 +651,12 @@ void AirPart_Date_Set(u8 airpart, u8 para0, u8 method, u8 para1, u8 para2, u8 pa
 		}
 	}
 }
+
+void AirPart_Del(u8 airpart)
+{
+	if (airpart < Air_SHD || airpart >= Air_SHD + AirT_Max)
+		return;
+
+	AirPart_Date_Set(airpart, 0, AirPart_STOP, 0, 0, 0);
+	AirT_Work.KeepFlag[airpart - Air_SHD] = 0;
+}

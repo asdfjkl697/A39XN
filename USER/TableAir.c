@@ -155,14 +155,14 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
 #ifdef USE_FOOT_ROCK
-	{Air_FeetS, AirPart_ModeA, 80 - FEET_AIR_WEAK * 2, 4, 6},
-	{Air_Ankle, AirPart_ModeA, 75 - FEET_AIR_WEAK, 3, 7},
+	{Air_FeetS, AirPart_ModeA, 70 - FEET_AIR_WEAK * 2, 5, 5},
+	{Air_Ankle, AirPart_ModeA, 60 - ANKLE_AIR_WEAK * 2, 5, 5},
 	{Part_EXEC, ConMth_Air, 10, 60, 0},
 	{Motor_Rock, FootRock_2POS, 0x02, 4, 0x31},
 	{Part_EXEC, ConMth_Air, 20, 60, 0},
 #else
 	{Air_FeetS, AirPart_ModeA, 80 - FEET_AIR_WEAK * 2, 4, 6},
-	{Air_Ankle, AirPart_ModeA, 75 - FEET_AIR_WEAK, 4, 6},
+	{Air_Ankle, AirPart_ModeA, 75 - ANKLE_AIR_WEAK, 4, 6},
 	{Part_EXEC, ConMth_Air, 30, 60, 0},
 #endif
 
@@ -171,9 +171,9 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001000), 90, 10, 50},
 #elif defined USE_FOOT_ROCK
-	{Air_CalfS, AirPart_ModeB, 90 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50},
+	{Air_CalfS, AirPart_ModeB, 90 - CALF_AIR_WEAK * 2, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #else
-	{Air_UpDw, B(00001000), 90 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50},
+	{Air_UpDw, B(00001000), 90 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
 	{Air_ArmL, AirPart_ModeA, 90, 3, 7},
 	{Part_EXEC, ConMth_Air, 25, 60, 0},
@@ -188,6 +188,7 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 	{Motor_Rock, FootRock_2POS, 0x42, 3, 0x21},
 	{Air_CalfS, AirPart_STOP, 0, 0, 0},
 	{Air_ArmR, AirPart_STOP, 0, 0, 0},
+	{Air_Ankle, AirPart_ModeB, 30 - ANKLE_AIR_WEAK, 10 + ANKLE_AIR_WEAK, 40 - ANKLE_AIR_WEAK},
 	{Air_ArmL, AirPart_ModeB, 50, 10, 40},
 	{Part_EXEC, ConMth_Air, 5, 60, 0}, //* 先充5秒
 	{Air_ArmL, AirPart_ModeA, 60, 3, 7},
@@ -247,7 +248,7 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 #if (AIR_CLAFBOT)
 	{Air_SHD, AirPart_STOP, 0, 0, 0},
 #else
-	{Air_UpDw, B(00001000), 60, 10 + CALF_AIR_WEAK, 50},
+	{Air_UpDw, B(00001000), 60 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
 	{Air_ArmR, AirPart_ModeB, 60, 10, 50},
 	{Part_EXEC, ConMth_Air, 12, 60, 0},
@@ -287,7 +288,7 @@ const CoreMixOtherTabItem_t GasTab_FullA[] = {
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
 	{Air_FeetS, AirPart_ModeA, 70 - FEET_AIR_WEAK, 4, 6},
-	{Air_Ankle, AirPart_ModeA, 65 - FEET_AIR_WEAK, 4, 6},
+	{Air_Ankle, AirPart_ModeA, 65 - ANKLE_AIR_WEAK * 2, 4, 6},
 #ifdef USE_FOOT_ROCK
 	{Part_EXEC, ConMth_Air, 10, 60, 0},
 	{Motor_Rock, FootRock_2POS, 0x32, 5, 0x21},
@@ -301,9 +302,9 @@ const CoreMixOtherTabItem_t GasTab_FullA[] = {
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001000), 70, 10, 40},
 #elif defined USE_FOOT_ROCK
-	{Air_CalfS, AirPart_ModeB, 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40},
+	{Air_CalfS, AirPart_ModeB, 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #else
-	{Air_UpDw, B(00001000), 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40},
+	{Air_UpDw, B(00001000), 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
 	{Air_ArmL, AirPart_ModeA, 70, 4, 6},
 	{Part_EXEC, ConMth_Air, 25, 60, 0},
@@ -360,7 +361,7 @@ const CoreMixOtherTabItem_t GasTab_FullA[] = {
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(00000000), 50, 10, 50},
 #else
-	{Air_UpDw, B(00001000), 50, 10 + CALF_AIR_WEAK, 50},
+	{Air_UpDw, B(00001000), 50 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
 	{Air_ArmR, AirPart_ModeB, 50, 10, 40},
 	{Part_EXEC, ConMth_Air, 12, 60, 0},
@@ -393,7 +394,7 @@ const CoreMixOtherTabItem_t GasTab_FullB[] = {
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001010), 70, 10, 40},
 #else
-	{Air_UpDw, B(00001010), 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40},
+	{Air_UpDw, B(00001010), 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
 
 	{Part_EXEC, ConMth_Air, 25, 60, 0},
@@ -449,7 +450,7 @@ const CoreMixOtherTabItem_t GasTab_FullB[] = {
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001000), 50, 10, 50},
 #else
-	{Air_UpDw, B(00001000), 50, 10 + CALF_AIR_WEAK, 50},
+	{Air_UpDw, B(00001000), 50 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
 	{Air_ArmR, AirPart_ModeB, 50, 10, 40},
 	{Part_EXEC, ConMth_Air, 12, 60, 0},
@@ -483,7 +484,7 @@ const CoreMixOtherTabItem_t GasTab_STRPREA[] = {
 #else
 	{Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
 #endif
-	{Air_Ankle, AirPart_ModeB, 100 - FEET_AIR_WEAK, 0, 100 - FEET_AIR_WEAK},
+	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK * 2, ANKLE_AIR_WEAK, 80 - ANKLE_AIR_WEAK * 2},
 
 	{Air_ArmL, AirPart_STOP, 0, 0, 0},
 	{Air_ArmR, AirPart_ModeB, 80, 0, 80},
@@ -512,15 +513,17 @@ const CoreMixOtherTabItem_t GasTab_STRPREB[] = {
 	{Air_UpDw, B(00000000), 0, 0, 0},
 	{Part_EXEC, ConMth_Air, 3, 60, 0}, // todo add 260629
 
-	{Air_UpDw, B(00010000), 60 - FEET_AIR_WEAK, 10 + FEET_AIR_WEAK, 60 - FEET_AIR_WEAK},
-	{Air_Ankle, AirPart_ModeB, 100, 0, 100}, // @ 增加脚后跟不泄气 MD 251220
+	{Air_SHD, AirPart_ModeB, 60, 10, 50}, // todo 脚部太重 泄点气 261022
+	{Air_FeetS, AirPart_ModeB, 70 - FEET_AIR_WEAK * 2, 10 + FEET_AIR_WEAK, 60 - FEET_AIR_WEAK * 2},
+	{Air_Ankle, AirPart_ModeB, 70 - ANKLE_AIR_WEAK * 2, ANKLE_AIR_WEAK, 60 - ANKLE_AIR_WEAK * 2}, // @ 增加脚后跟不泄气 MD 251220
 
-	{Air_CalfS, AirPart_ModeB, 60 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
+	{Air_CalfS, AirPart_ModeB, 50 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 40 - CALF_AIR_WEAK},
 #if (AIR_CLAFBOT)
 	{Air_CalfB, AirPart_ModeB, 60, 10, 50},
 #endif
 	{Part_EXEC, ConMth_Air, 30, 60, 0},
 
+	{Air_SHD, AirPart_STOP, 0, 0, 0},
 	{Part_LOOP, 0, 5, 1, 0},
 	{Part_EXEC, ConMth_Air, 30, 60, 0},
 

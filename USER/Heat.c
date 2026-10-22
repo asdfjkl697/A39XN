@@ -19,8 +19,8 @@ uint8_t RedLight_Duty;
 
 uint8_t RedLight_DutyToPwm(uint8_t level)
 {
-	static const uint8_t duty_by_level[] = {0, 40, 60, 80, 100};
-	return level <= 4 ? duty_by_level[level] : 0;
+	static const uint8_t duty_by_level[] = {0, 50, 70, 90};
+	return level <= 3 ? duty_by_level[level] : 0;
 }
 
 static const uint16_t HeatOnOffTimeTab[][2] =

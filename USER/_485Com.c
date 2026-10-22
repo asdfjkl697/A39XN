@@ -182,6 +182,7 @@ void RS485_DataRx(u8 dat)
 			TxPolling++;
 			memcpy(&LegRx, &Rx485Var.RxBuffer[9], sizeof(LegDataRx_S));
 			break;
+#ifndef USE_S0558
 		case ArmKeyAddr:
 			TICK_RESET(ArmKey_Loss_tick); // * 心跳计数清零
 			if (PartRxCount != ArmKeyTx_Count)
@@ -191,6 +192,7 @@ void RS485_DataRx(u8 dat)
 			memcpy(&RxVar.RxBuffer[9], &Rx485Var.RxBuffer[9], sizeof(ArmKeyRx_S));
 			ArmKey_Handler();
 			break;
+#endif
 		case MoveDwAddr:
 #ifdef USE_M2
 			TICK_RESET(MoveDw_Loss_tick); // * 心跳计数清零
@@ -222,18 +224,21 @@ void _485_ComRx(void)
 	}
 }
 
-#ifdef USE_M2
-#if (LEG_COM)
-#define TxChMax 4
+#ifdef USE_S0558
+#define ARMKEY_485_ENABLED 0
 #else
-#define TxChMax 3
+#define ARMKEY_485_ENABLED 1
 #endif
+
+#if defined(USE_M2) && (LEG_COM)
+#define TxChMax (3 + ARMKEY_485_ENABLED)
+#define ArmKeyPollingIndex 3
+#elif (LEG_COM) || defined(USE_M2)
+#define TxChMax (2 + ARMKEY_485_ENABLED)
+#define ArmKeyPollingIndex 2
 #else
-#if (LEG_COM)
-#define TxChMax 3
-#else
-#define TxChMax 2
-#endif
+#define TxChMax (1 + ARMKEY_485_ENABLED)
+#define ArmKeyPollingIndex 1
 #endif
 
 uint8_t TxPolling = 0;
@@ -251,6 +256,32 @@ void RS485_Poll_Reset(void) // * add 251104
 	RS485_Idle_Cnt = RS485_Idle_MAX;
 	TxPolling = 0;
 }
+
+static bool RS485_LossTimeout(void)
+{
+	if (TxPolling == 0 && TICK_COUNTER(MoveUp_Loss_tick, 3000))
+		return true;
+
+#if defined USE_M2 && (LEG_COM)
+	if ((TxPolling == 1 && TICK_COUNTER(MoveDw_Loss_tick, 3000)) ||
+		(TxPolling == 2 && TICK_COUNTER(Leg_Loss_tick, 5000)))
+		return true;
+#elif (LEG_COM)
+	if (TxPolling == 1 && TICK_COUNTER(Leg_Loss_tick, 5000))
+		return true;
+#elif defined USE_M2
+	if (TxPolling == 1 && TICK_COUNTER(MoveDw_Loss_tick, 3000))
+		return true;
+#endif
+
+#if ARMKEY_485_ENABLED
+	if (TxPolling == ArmKeyPollingIndex && TICK_COUNTER(ArmKey_Loss_tick, 5000))
+		return true;
+#endif
+
+	return false;
+}
+
 void RS485_Polling(void)
 {
 	if (++RS485_Idle_Cnt > RS485_Idle_MAX)
@@ -296,21 +327,7 @@ void RS485_Polling(void)
 	}
 	else if (TxKeepCnt > 0)
 	{
-		if ((TxPolling == 0 && TICK_COUNTER(MoveUp_Loss_tick, 3000)) ||
-#if defined USE_M2 && (LEG_COM)
-			(TxPolling == 1 && TICK_COUNTER(MoveDw_Loss_tick, 3000)) ||
-			(TxPolling == 2 && TICK_COUNTER(Leg_Loss_tick, 5000)) ||
-			(TxPolling == 3 && TICK_COUNTER(ArmKey_Loss_tick, 5000))
-#elif (LEG_COM)
-			(TxPolling == 1 && TICK_COUNTER(Leg_Loss_tick, 5000)) ||
-			(TxPolling == 2 && TICK_COUNTER(ArmKey_Loss_tick, 5000))
-#elif defined USE_M2
-			(TxPolling == 1 && TICK_COUNTER(MoveDw_Loss_tick, 3000)) ||
-			(TxPolling == 2 && TICK_COUNTER(ArmKey_Loss_tick, 5000))
-#else
-			(TxPolling == 1 && TICK_COUNTER(ArmKey_Loss_tick, 5000))
-#endif
-		)
+		if (RS485_LossTimeout())
 		{
 			TxPolling++;
 			TxPollingPre = TxPolling; // @ add for resend bug 260423
@@ -336,28 +353,36 @@ void RS485_Polling(void)
 		LegDataTx();
 		RS485_Delay = 2; // @ 间隔时间不同 251206
 		break;
+#if ARMKEY_485_ENABLED
 	case 3:
 		ArmKeyDataTx();
 		break;
+#endif
 #elif (LEG_COM)
 	case 1:
 		LegDataTx();
 		RS485_Delay = 2;
 		break;
+#if ARMKEY_485_ENABLED
 	case 2:
 		ArmKeyDataTx();
 		break;
+#endif
 #elif defined USE_M2
 	case 1:
 		MSG2MoveDw_Deal();
 		break;
+#if ARMKEY_485_ENABLED
 	case 2:
 		ArmKeyDataTx();
 		break;
+#endif
 #else
+#if ARMKEY_485_ENABLED
 	case 1:
 		ArmKeyDataTx();
 		break;
+#endif
 #endif
 	default:
 		break;

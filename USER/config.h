@@ -137,6 +137,7 @@ typedef enum
     MoveDw_KneadF, // 下机芯揉捏复制
     MoveDw_TapF,   // 下机芯拍打复制
     MoveDw_FlexF,
+    Air_Del, // 停止指定气囊并取消该气囊保压
     Air_Refresh,
     Air_Keep,  // 保压
     Air_UpDw,  // 上+下

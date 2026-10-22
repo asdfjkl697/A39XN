@@ -11,7 +11,11 @@
 // #include "DEFINE.h"
 #include "config.h"
 
+#ifdef USE_S0558
+#define RxLength 32 // 接收缓冲长度
+#else
 #define RxLength 10 // 接收缓冲长度
+#endif
 #define TxLength 10 // 发送缓冲长度
 
 // #define P_RXB gpio_input_data_bit_read(GPIOB, GPIO_PINS_8)

@@ -604,12 +604,10 @@ void Display_Drive_A1(void)
 #endif
 	Display.MassageStrength = UserIntensityGet(); /* 力度模式 0：轻揉 1：舒缓 2：强劲 */
 	Display.EorValue = nAllEor;					  /* 错误提示 */
-	Display.IDCode1 = 6; /* 序列号 */			  //* 目前无效 250324
-	Display.IDCode2 = 12;						  /* 序列号 */
-	Display.IDCode3 = 24;						  /* 序列号 */
-	Display.IDCode4 = 20;						  /* 序列号 */
 
-	Display.WiseValue = 0; // todo 1->0 王琦翔修改 260707
+	Display.Byte16.Bit.RedLightGear = RedLight_Duty; // todo add 261021
+
+	Display.WiseValue = 0; // @ 1->0 王琦翔修改 260707
 	/*手法显示===========================================================================*/
 	if ((MoveUp == MoveWhichGet()) && (0 == AutoModeGet())) /* 上机芯手法显示 */
 	{
@@ -801,9 +799,10 @@ void Display_Drive_A1(void)
 	Display.Byte26.Bit.VoicePlay = nVoicePlayer; /* 语音播报开关*/
 	Display.Byte26.Bit.Volume = nVolume;		 /* 音量 */
 
-	Display.Byte27.Bit.LedMode = nLigntSw;			 /* LED灯开关 */
-	Display.Byte27.Bit.BGM = nMusicSW;				 /* 背景音乐开关 */
-	Display.Byte27.Bit.TimOutReset = nTimOutResetSw; /* 按摩时间到椅子自动复位开关 */
+	Display.Byte27.Bit.LedMode = nLigntSw;			   /* LED灯开关 */
+	Display.Byte27.Bit.BGM = nMusicSW;				   /* 背景音乐开关 */
+	Display.Byte27.Bit.TimOutReset = nTimOutResetSw;   /* 按摩时间到椅子自动复位开关 */
+	Display.Byte27.Bit.AnkleRocking = FootSwing_Level; /* 足踝摇摆挡位 */
 
 	Display.Language = Dispaly_Language; /* 语言  */ // * 修改 nLanguage 250226
 
