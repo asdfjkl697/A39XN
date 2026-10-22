@@ -242,14 +242,15 @@ int main(void)
                     }
                     else
                     {
-                        if (nTimOutResetSw)
-                        {
-                            UserFunc_Set(UserFunc_PowerOff, 0);
-                        }
-                        else
-                        {
-                            UserFunc_Set(UserFunc_PowerOff, 1);
-                        }
+                        // if (nTimOutResetSw)
+                        // {
+                        //     UserFunc_Set(UserFunc_PowerOff, 0);
+                        // }
+                        // else
+                        // {
+                        //     UserFunc_Set(UserFunc_PowerOff, 1);
+                        // }
+                        UserFunc_Set(UserFunc_PowerOff, 2);
                     }
                 }
             }

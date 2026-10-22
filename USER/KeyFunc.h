@@ -95,6 +95,7 @@ typedef enum
     Key_FootRock = 0x60, // @ add 261015
     Key_FootSwing,
     Key_RedLight,
+    Key_MassFinish, // * 按摩结束选择 261022
 
     Key_WakeUp = 200,
     Key_BackUpDown,

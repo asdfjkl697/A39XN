@@ -80,6 +80,7 @@ HandlerKeyMap_t KeyMap[] = {
 	{0x4D, Key_LowPower, 0xFF},			/* 低功耗 */
 	{0x51, Key_FootSwing, 0xFF},		/* 足底摇摆 */
 	{0x66, Key_RedLight, 0xFF},			/* 红光 */
+	{0x67, Key_MassFinish, 0xFF},		/* 按摩结束选择 */
 	{0xB0, key_SOUND_ACK, 0xFF},		/* 应答声 */
 };
 

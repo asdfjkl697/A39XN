@@ -382,6 +382,11 @@ void WorkStateProcess(void)
 
 		break;
 
+	case WorkState_MassageFinish:
+		if (TICK_COUNTER(Work.Tick, TIMEOUT_20MIN)) // * 结束提示 20 分钟不操作自动关机 261022
+			UserFunc_Set(UserFunc_PowerOff, 1);
+		break;
+
 	default:
 		break;
 	}
@@ -515,12 +520,22 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 		{
 			Core_RestSuccess = 0;		  // * 增加 250516
 			MChair.CFG.Bit.CoreReset = 0; // * 开机就当作已经复位 250123 删除 250221 恢复 250419 屏蔽测试 250421
-			if (AtTabGet(Table_Auto)->CurAutoTab == A_Reset)
-				AtTabSet_ID(Table_Auto, 0); // * 复位清零，方便重新加载 251007
+			if (nparam)
+			{
+				Massage_Flag.Reset = 0; // * 跳过机芯复位 继续按摩 261022
+			}
+			else
+			{
+				if (AtTabGet(Table_Auto)->CurAutoTab == A_Reset)
+					AtTabSet_ID(Table_Auto, 0); // * 复位清零，方便重新加载 251007
+			}
 		}
 
 		MoveWhichSet(MoveUp);
-		WorkStateSet(WorkState_TurnOn);
+		if (nparam)
+			WorkStateSet(WorkState_WaitFunc); // * 继续按摩 直接进入功能等待
+		else
+			WorkStateSet(WorkState_TurnOn);
 		DDG_Set_Stop();
 		FootFlexStateSet(FlexStop);
 		Work.CurMin = 20;
@@ -633,11 +648,20 @@ void UserFunc_Set(u8 ntype, u8 nparam)
 			Work.VoicePlayFlag = 0;
 			ResetStep = 0;
 		}
-		else
+		else if (nparam == 1)
 		{
 			DDG_Set_Stop();
 			Work.CurState = WorkState_Reset;
 			ResetStep = 2; // @ 1-2 修改 260421
+		}
+		else if (nparam == 2)
+		{
+#ifdef USE_FOOT_ROCK
+			LegRockMoveToPosition(ROCKPOS_N2, 5);
+#endif
+			DDG_Set_Stop();
+			TICK_RESET(Work.Tick);
+			Work.CurState = WorkState_MassageFinish;
 		}
 		break;
 

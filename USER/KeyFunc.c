@@ -1938,6 +1938,17 @@ void KeyFunc(void)
             Buzzer = SOUND_ACK;
             break;
 
+        case Key_MassFinish:
+            if (Key.Param == 0)
+            {
+                UserFunc_Set(UserFunc_PowerOff, 0); // * 结束 整机复位关机
+            }
+            else if (Key.Param == 1)
+            {
+                UserFunc_Set(UserFunc_PowerOn, 1); // * 继续 跳过复位进入功能等待
+            }
+            break;
+
         case Key_BodyCheck_Jump:
             // if (WorkStateGet() == WorkState_BodyCheck)
             if (WorkStateGet() == WorkState_BodyCheck || WorkStateGet() == WorkState_AutoLying) // todo 修改为了调试跳过 260701

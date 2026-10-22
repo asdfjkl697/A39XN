@@ -28,6 +28,7 @@ typedef enum
 	WorkState_HealthFinish,
 	WorkState_FCT,
 	WorkState_WifiWait,
+	WorkState_MassageFinish,
 	WorkState_UserIntensityChose = 24,
 	WorkState_Warn,
 	WorkState_Update = 255,
