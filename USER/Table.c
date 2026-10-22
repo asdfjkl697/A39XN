@@ -43,10 +43,13 @@ const CoreMixOtherTabItem_t Table_LC[] = {
 	{MoveDw_Tap, FLAP_ACT, 0, 0, 10},
 	{Part_EXEC, ConMth_MoveDw, 0, 30, 0},
 
-	{Part_LOOP, 0, 2, 28, 0},
+	{Part_LOOP, 0, 2, 29, 0},
 	{Motor_Zero, MotorPart_Stretch, DDG_BCircle_Zero3, DDG_LCircle_Zero3, 0},
 	{MoveUp_Tread, TREAD_FIX_CIRCLE, MOVEUP_LC & 0xff, MOVEUP_LC >> 8, 8},
-	{Part_EXEC, ConMth_MoveUp, 5, 60, 0},
+	{Part_EXEC, ConMth_MoveUp, 30, 60, 0},
+#ifdef USE_FOOT_ROCK
+	{Motor_Rock, FootRock_2POS, 0x41, 2, 0x21},
+#endif
 	{Motor_Flex, MotorPart_FWD, 150, 0, 5},
 	{MoveUp_Tread, TREAD_FIX_CIRCLE, 100, 0, 8},
 	{Part_EXEC, ConMth_MoveUp, 5, 60, 0},
@@ -698,25 +701,6 @@ const CoreMixOtherTabItem_t Table_Auto5[] = {
 	//* 1 肩部揉捏
 	{MoveUp_Knead, KNEAD_1F2F, 0x95, 5, 0x95},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
-
-	// 	{MoveUp_Knead, KNEAD_1R2R, 0x95, 3, 0x95},
-	// 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
-
-	// 	{Part_SUB, 0, SUBTB_Neck2BackA, 0, 0},
-
-	// #ifdef USE_M2
-	// 	{MoveDw_Knead, KNEAD_STOP, 0, 0, 0},
-	// 	{Part_EXEC, ConMth_MoveDw, 0, 30, 0}, // 10
-	// #endif
-	// 	{Part_SUB, 0, SUBTB_BackMaA, 0, 0}, // * 背部1 251109
-	// #ifndef USE_M2
-	// 	{Part_SUB, 0, SUBTB_HIPB, 0, 0},
-	// #endif
-
-	// 	{MoveUp_Knead, KNEAD_1F2R, 0x65, 0xFF, 0x22},
-	// 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 8},
-	// 	{MoveUp_Flex, FLEX_BACK_FORTH, 15, 0, 2},
-	// 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
 	//* 15 大椎拍打
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 6},

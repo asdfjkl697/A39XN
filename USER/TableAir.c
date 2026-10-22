@@ -2,9 +2,7 @@
 
 //* 老化伴随程序
 const CoreMixOtherTabItem_t GasTab_LC[] = {
-#ifdef USE_FOOT_ROCK
-	{Motor_Rock, FootRock_2POS, 0x51, 5, 0x21},
-#endif
+
 	{Air_FeetS, AirPart_ModeB, 50, 10, 40},
 	{Air_Ankle, AirPart_ModeB, 50, 10, 40},
 	{Air_CalfS, AirPart_STOP, 0, 0, 0},

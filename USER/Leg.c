@@ -189,7 +189,7 @@ void LegRock_Updata(void)
 
 		if (((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < ROCK_DEF_LEG + 9) ||
 			 DDG_Get_LnCurCircle < ROCK_DEF_LEG) &&
-			KeyPush.RockKeyState == 2)
+			(KeyPush.RockKeyState == 2 || KeyPush.RockKeyState == 3))
 		{
 			u16 circle = LegRockGetCircle();
 			if (circle > ROCKPOS_N2)
@@ -298,6 +298,9 @@ void LegInit(void)
 void LegDataTx(void) // @ 100ms 内轮询一次 261014
 {
 	u8 LegDataUpdate[sizeof(LegDataTx_S)] = {0};
+#ifdef USE_FOOT_ROCK
+	LegDataTx_S LegDataOutput;
+#endif
 
 	LegTx.Roll.State = RollStateGet();
 	LegTx.Roll.Speed = RollSpeedGet();
@@ -322,6 +325,21 @@ void LegDataTx(void) // @ 100ms 内轮询一次 261014
 		LegTx.Led.State = 0;
 
 	memcpy(&LegDataUpdate, &LegTx, sizeof(LegDataUpdate) / sizeof(LegDataUpdate)[0]);
+#ifdef USE_FOOT_ROCK
+	memcpy(&LegDataOutput, LegDataUpdate, sizeof(LegDataOutput));
+	if (KeyPush.RockKeyState == 3 && FootSwing_Level > 2 &&
+		LegDataOutput.Rock.State == ROCK_STATE_POSITION)
+	{
+		u16 position = (u16)((u16)LegDataOutput.Rock.Circle_H8 << 8) |
+					   LegDataOutput.Rock.Circle_L8;
+		if (position > ROCKPOS_N2)
+		{
+			LegDataOutput.Rock.Circle_L8 = (u8)ROCKPOS_N2;
+			LegDataOutput.Rock.Circle_H8 = (u8)(ROCKPOS_N2 >> 8);
+		}
+	}
+	memcpy(LegDataUpdate, &LegDataOutput, sizeof(LegDataOutput));
+#endif
 	_485_ComTx(LegAddr, MainAddr, LegTx_Count, 0x0001, sizeof(LegDataUpdate) / sizeof(LegDataUpdate)[0], LegDataUpdate);
 }
 
