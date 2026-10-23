@@ -175,9 +175,11 @@ void TIMER4_IRQHandler(void)
 
 static uint8_t s_Connected;
 static uint8_t s_PushTicks;
+static uint8_t s_HadConnection;
 static KeyFunc_E s_PostureKey;
 static uint8_t s_PostureParam;
 static uint8_t s_PostureActive;
+volatile uint8_t S0553_ProbeFault;
 
 static uint8_t S0553Key_WorkIsActive(void)
 {
@@ -472,7 +474,9 @@ void S0553Key_Init(void)
 {
     s_Connected = 0u;
     s_PushTicks = 0u;
+    s_HadConnection = 0u;
     s_PostureActive = 0u;
+    S0553_ProbeFault = 0u;
     S0553_Init();
 }
 
@@ -483,8 +487,15 @@ void S0553Key_Task10ms(void)
     if (!S0553_IsConnected())
     {
         s_Connected = 0u;
+        if (s_HadConnection != 0u)
+        {
+            S0553_ProbeFault = 1u;
+        }
         return;
     }
+
+    s_HadConnection = 1u;
+    S0553_ProbeFault = 0u;
 
     if (s_Connected == 0u)
     {

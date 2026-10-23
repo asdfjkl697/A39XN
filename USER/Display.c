@@ -8,6 +8,9 @@
 #include "System.h"
 #include "Table.h"
 #include "MassageLogic.h"
+#ifdef USE_S0553
+extern volatile uint8_t S0553_ProbeFault;
+#endif
 /*
  * 类型定义 *************************************************************************************************************************************
  */
@@ -281,6 +284,13 @@ void Eor_Update(void)
 	else
 		Eor_Show_Data[j] = 0;
 	j++;
+
+#ifdef USE_S0553
+	if (j < Max_Eor_Group)
+	{
+		Eor_Show_Data[j++] = S0553_ProbeFault ? 0x54 : 0;
+	}
+#endif
 
 	if (j >= Max_Eor_Group)
 		return;
