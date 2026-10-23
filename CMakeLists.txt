@@ -81,6 +81,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/USER/Pump
     ${CMAKE_SOURCE_DIR}/USER/Memory
     ${CMAKE_SOURCE_DIR}/USER/Health
+    ${CMAKE_SOURCE_DIR}/USER/Key_S0553
+    ${CMAKE_SOURCE_DIR}/USER/Key_S0553/Layer
 )
 
 # ---------------------------------------------------------------------------

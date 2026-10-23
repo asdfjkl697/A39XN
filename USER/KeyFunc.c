@@ -1380,6 +1380,44 @@ void KeyFunc(void)
                 default: // 停止
                     i = TZ;
                     break;
+#ifdef USE_S0553
+                case 0:
+                    i = TZ;
+                    break;
+                case 1:
+                    i = RNZ;
+                    break;
+                case 2:
+                    i = PD;
+                    break;
+                case 3:
+                    i = PDB;
+                    break;
+                case 4:
+                    i = RPZ;
+                    break;
+                case 5:
+                    i = ZYS;
+                    break;
+                case 6:
+                    i = ZYD;
+                    break;
+                case 7:
+                    i = JRZ;
+                    break;
+                case 8:
+                    i = D3RNZ;
+                    break;
+                case 9:
+                    i = D3PD;
+                    break;
+                case 10:
+                    i = D3RPZ;
+                    break;
+                case 11:
+                    i = D3RPF;
+                    break;
+#else
                 case 1: // 手法1 停止
                     i = TZ;
                     break;
@@ -1433,6 +1471,7 @@ void KeyFunc(void)
                 case 10: // 3D指压
                     i = ZYD;
                     break;
+#endif
 #endif
                 }
 #ifdef USE_M2

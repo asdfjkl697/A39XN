@@ -387,7 +387,7 @@
 #define USE_REDLIGHT_2KHZ
 #define USE_FOOT_ROCK
 #define USE_SOUNDWAVE
-#define USE_S0558
+#define USE_S0553
 #define USE_M2
 #define A390_ARMKEY
 #define ENGLISH_VOICE

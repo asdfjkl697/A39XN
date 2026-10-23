@@ -1,23 +1,18 @@
 #include "AirSensor.h"
-#if defined(USE_AIRSENSOR) || defined(USE_S0558)
-
-#if defined(USE_AIRSENSOR) && defined(USE_S0558)
-#error USE_AIRSENSOR and USE_S0558 share the same software UART pins and timer
+#if defined(USE_AIRSENSOR) && defined(USE_S0553)
+#error USE_AIRSENSOR and USE_S0553 share TIMER4 and the software UART pins
 #endif
 
-#ifdef USE_S0558
-#include "ArmKey.h"
-#include "_485Com.h"
-#endif
+#ifdef USE_AIRSENSOR
 
 u8 TxBusyFlag; // 正在发送一个字节, 用户设置1开始发送, 发送完毕系统清自动0
 u8 B_Rx_OK;    // 接收完的标志位, 收到数据块系统设置1, 用户处理数据后必须清0
-u8 Rx_Cnt = 0; // 接收到的字节数, 用户处理数据后必须清0
+u8 Rx_Cnt = 0;
 u8 Rx_Cnt1 = 0;
 u8 Tx_Cnt = 0;
 u8 Tx_Cnt1 = 0;
-u8 RxBuf[RxLength]; // 接收缓冲
-u8 TxBuf[TxLength]; // 发送缓冲
+volatile u8 RxBuf[RxLength];
+volatile u8 TxBuf[TxLength];
 
 //===== 下面这些为系统使用的常量或变量, 用户不可见，请勿修改 =============
 
@@ -70,18 +65,10 @@ void AirSensor_Init(void)
 
     timer_deinit(TIMER4);
 
-#ifdef USE_S0558
-    timer_initpara.prescaler = 0; // TIMER4 runs at 120MHz
-#else
     timer_initpara.prescaler = 120 - 1; // 1MHz 计数时钟
-#endif
     timer_initpara.alignedmode = TIMER_COUNTER_EDGE;
     timer_initpara.counterdirection = TIMER_COUNTER_UP;
-#ifdef USE_S0558
-    timer_initpara.period = 346; // 120MHz / (3 * 115200) = 347.2 timer ticks
-#else
     timer_initpara.period = 139 - 1; // 动态计算
-#endif
     timer_initpara.clockdivision = TIMER_CKDIV_DIV1;
     timer_initpara.repetitioncounter = 0;
 
@@ -344,51 +331,6 @@ u8 usart_Get_Data(void)
     return i;
 }
 
-#ifdef USE_S0558
-#define S0558_FrameLength 14
-
-static u8 S0558_Frame[S0558_FrameLength];
-static u8 S0558_FrameCount;
-
-static void S0558_HandleByte(u8 data)
-{
-    u16 checksum;
-
-    if (S0558_FrameCount == 0)
-    {
-        if (data == _485_Com_Head0)
-            S0558_Frame[S0558_FrameCount++] = data;
-        return;
-    }
-
-    if (S0558_FrameCount == 1 && data != _485_Com_Head1)
-    {
-        S0558_FrameCount = (data == _485_Com_Head0) ? 1 : 0;
-        if (S0558_FrameCount != 0)
-            S0558_Frame[0] = data;
-        return;
-    }
-
-    S0558_Frame[S0558_FrameCount++] = data;
-    if (S0558_FrameCount < S0558_FrameLength)
-        return;
-
-    S0558_FrameCount = 0;
-    checksum = (u16)S0558_Frame[12] | ((u16)S0558_Frame[13] << 8);
-    if (S0558_Frame[2] != MainAddr ||
-        S0558_Frame[3] != ArmKeyAddr ||
-        S0558_Frame[5] != 0x01 ||
-        S0558_Frame[6] != 0x00 ||
-        S0558_Frame[7] != sizeof(ArmKeyRx_S) ||
-        S0558_Frame[8] != 0 ||
-        CRC16_CCITT_FALSE(S0558_Frame, 12) != checksum)
-        return;
-
-    memcpy(&RxVar.RxBuffer[9], &S0558_Frame[9], sizeof(ArmKeyRx_S));
-    ArmKey_Handler();
-}
-#endif
-
 #ifdef USE_AIRSENSOR
 #define AirSensor_Head 0XAA
 #define AirSensor_Tial 0X55
@@ -453,12 +395,7 @@ static void AirSensor_Process(void)
 
 void AirSensor_Handler(void)
 {
-#ifdef USE_S0558
-    while (Rx_Cnt1 != Rx_Cnt)
-        S0558_HandleByte(usart_Get_Data());
-#else
     AirSensor_Process();
-#endif
 }
 
 #endif

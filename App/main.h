@@ -27,8 +27,11 @@
 
 #include "MoveBoth.h"
 
-#if defined(USE_AIRSENSOR) || defined(USE_S0558)
+#if defined(USE_AIRSENSOR)
 #include "AirSensor.h"
+#endif
+#ifdef USE_S0553
+#include "S0553Key.h"
 #endif
 
 extern uint8_t TxPolling;

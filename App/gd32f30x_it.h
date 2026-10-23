@@ -47,7 +47,7 @@ extern volatile uint8_t UART2_DATAPRO_SIGE;
 void  ADC_Process(void);
 extern volatile uint16_t AD_Get_Value[7];
 
-extern volatile uint32_t Timer_1ms,Timer_5ms_Cnt,Timer_50ms_Cnt,Timer_100ms_Cnt,Timer_200ms_Cnt,Timer_1s_Cnt;
+extern volatile uint32_t Timer_1ms,Timer_5ms_Cnt,Timer_10ms_Cnt,Timer_50ms_Cnt,Timer_100ms_Cnt,Timer_200ms_Cnt,Timer_1s_Cnt;
 /* function declarations */
 /* this function handles NMI exception */
 void NMI_Handler(void);

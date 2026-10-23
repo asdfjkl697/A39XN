@@ -41,7 +41,7 @@ OF SUCH DAMAGE.
 #include "config.h"
 #include "Motor.h"
 
-volatile uint32_t Timer_1ms = 0, Timer_5ms_Cnt = 0, Timer_50ms_Cnt = 0, Timer_100ms_Cnt = 0, Timer_150ms_Cnt = 0, Timer_200ms_Cnt = 0, Timer_1s_Cnt;
+volatile uint32_t Timer_1ms = 0, Timer_5ms_Cnt = 0, Timer_10ms_Cnt = 0, Timer_50ms_Cnt = 0, Timer_100ms_Cnt = 0, Timer_150ms_Cnt = 0, Timer_200ms_Cnt = 0, Timer_1s_Cnt;
 volatile u8 ADC0_Finish = 0;
 
 /*!
@@ -151,6 +151,7 @@ void SysTick_Handler(void)
     delay_decrement();
     Timer_1ms++;
     Timer_5ms_Cnt++;
+    Timer_10ms_Cnt++;
     Timer_50ms_Cnt++;
     Timer_100ms_Cnt++;
     Timer_200ms_Cnt++;

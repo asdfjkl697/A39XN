@@ -89,7 +89,7 @@ int main(void)
     ota_init();
     UserConfig();
     AirInit();
-#if defined(USE_AIRSENSOR) || defined(USE_S0558)
+#ifdef USE_AIRSENSOR
     AirSensor_Init(); // todo add 260629
 #endif
     Motor_Work_Iint(); // * add 251010
@@ -105,6 +105,9 @@ int main(void)
     Health_Init();
     Variable_Init(); //* 增加 变量初始化
     UserFunc_Set(UserFunc_PowerOff, 0);
+#ifdef USE_S0553
+    S0553Key_Init();
+#endif
 
 #ifdef USE_WDT_ENABLE
     fwdgt_init();
@@ -134,8 +137,16 @@ int main(void)
 
         KeyCom_Handler(); /* 手控器接收数据 */
 
-#if defined(USE_AIRSENSOR) || defined(USE_S0558)
+#ifdef USE_AIRSENSOR
         AirSensor_Handler(); // todo add 260629
+#endif
+
+#ifdef USE_S0553
+        if (Timer_10ms_Cnt >= 10u)
+        {
+            Timer_10ms_Cnt -= 10u;
+            S0553Key_Task10ms();
+        }
 #endif
 
         CoreRest(); /* 机芯复位 */
