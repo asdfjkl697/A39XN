@@ -219,10 +219,7 @@ void KeyPowerScan(void) //* 100ms
     // todo add 261015
     if (((KeyPush.RockKeyState == 1 || KeyPush.RockKeyState == 2) && GetLegDataRx()->Rock.Place > 0) ||
 #ifdef USE_FOOT_ROCK
-        (KeyPush.RockKeyState == 2 &&
-         (((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < ROCK_DEF_LEG + 9) ||
-           DDG_Get_LnCurCircle < ROCK_DEF_LEG) &&
-          ((u16)GetLegDataRx()->Rock.CurCircle_H8 << 8) | GetLegDataRx()->Rock.CurCircle_L8) >= ROCKPOS_N2)
+        (KeyPush.RockKeyState == 2 && ROCK_IS_LEG_UP() && ROCK_CUR_CIRCLE() >= ROCKPOS_N2)
 #else
         0
 #endif

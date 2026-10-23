@@ -118,8 +118,8 @@ const CoreMixOtherTabItem_t GasTab_LowerAir[] = {
 #endif
 	{Part_EXEC, ConMth_Air, 20, 60, 0},
 
-	{Air_FeetS, AirPart_ModeB, 60, 3, 7},
-	{Air_Ankle, AirPart_ModeB, 55, 3, 7},
+	{Air_FeetS, AirPart_ModeA, 60, 3, 7},
+	{Air_Ankle, AirPart_ModeA, 55, 3, 7},
 	{Part_EXEC, ConMth_Air, 20, 30, 0},
 
 #ifdef USE_FOOT_ROCK
@@ -169,7 +169,7 @@ const CoreMixOtherTabItem_t GasTab_Full[] = {
 #if (AIR_CLAFBOT)
 	{Air_UpDw, B(01001000), 90, 10, 50},
 #elif defined USE_FOOT_ROCK
-	{Air_CalfS, AirPart_ModeB, 90 - CALF_AIR_WEAK * 2, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
+	{Air_CalfS, AirPart_ModeB, 70 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #else
 	{Air_UpDw, B(00001000), 90 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 50 - CALF_AIR_WEAK},
 #endif
@@ -480,9 +480,9 @@ const CoreMixOtherTabItem_t GasTab_STRPREA[] = {
 #ifdef FEET_STRAIR_ADD
 	{Air_FeetS, AirPart_ModeB, 120, 0, 120},
 #else
-	{Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
+	{Air_FeetS, AirPart_ModeB, 70 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 70 - FEET_AIR_WEAK * 2},
 #endif
-	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK * 2, ANKLE_AIR_WEAK, 80 - ANKLE_AIR_WEAK * 2},
+	{Air_Ankle, AirPart_ModeB, 70 - ANKLE_AIR_WEAK * 2, ANKLE_AIR_WEAK, 70 - ANKLE_AIR_WEAK * 2},
 
 	{Air_ArmL, AirPart_STOP, 0, 0, 0},
 	{Air_ArmR, AirPart_ModeB, 80, 0, 80},

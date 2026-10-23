@@ -31,7 +31,7 @@ void ArmKeyDataTx(void)
  *返回值：无
  *注意：无
  ***************************************************************************************************************/
-#if defined(A365B_ARMKEY) || defined(USE_S0558)
+#if defined(A365B_ARMKEY)
 void ArmKey_Handler(void)
 {
 	u8 i;

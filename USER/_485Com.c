@@ -182,7 +182,7 @@ void RS485_DataRx(u8 dat)
 			TxPolling++;
 			memcpy(&LegRx, &Rx485Var.RxBuffer[9], sizeof(LegDataRx_S));
 			break;
-#ifndef USE_S0558
+#ifndef USE_S0553
 		case ArmKeyAddr:
 			TICK_RESET(ArmKey_Loss_tick); // * 心跳计数清零
 			if (PartRxCount != ArmKeyTx_Count)
@@ -224,7 +224,7 @@ void _485_ComRx(void)
 	}
 }
 
-#ifdef USE_S0558
+#ifdef USE_S0553
 #define ARMKEY_485_ENABLED 0
 #else
 #define ARMKEY_485_ENABLED 1
