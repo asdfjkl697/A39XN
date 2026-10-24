@@ -395,6 +395,10 @@ void AT_TableHandle(AT_CMD_S *cmd_p, u8 tablenum)
 				break;
 			case ASSIGN_Mark:
 				cmd_p->PartOverMark = pAutoExeStepData->Para3; // @ 增加赋值 260129
+				break;
+			case ASSIGN_FootFindAfterStretch:
+				MotorT_FootFindAfterStretchArm();
+				break;
 			default:
 				break;
 			}

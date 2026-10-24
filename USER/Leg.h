@@ -21,14 +21,14 @@ typedef enum
 // todo 翻转取值范围 50-480 261014
 #ifdef USE_FOOT_ROCK
 #define ROCK_DEF_BACK DDG_BCircle_Max / 2
-#define ROCK_DEF_LEG DDG_LCircle_Max / 2 - 2
+#define ROCK_DEF_LEG DDG_LCircle_Max / 2 - 8
 /* 小腿处于抬起/危险区（翻转摆动需限制在 N2 以内） */
-#define ROCK_IS_LEG_UP() \
-    ((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < ROCK_DEF_LEG + 9) || \
-     DDG_Get_LnCurCircle < ROCK_DEF_LEG)
+#define ROCK_IS_LEG_UP()                                                                  \
+	((DDG_Get_BnCurCircle < ROCK_DEF_BACK && DDG_Get_LnCurCircle < (ROCK_DEF_LEG + 5)) || \
+	 DDG_Get_LnCurCircle < ROCK_DEF_LEG)
 /* 当前翻转圈数（CurCircle 低/高 8 位合成 u16） */
 #define ROCK_CUR_CIRCLE() \
-    (((u16)GetLegDataRx()->Rock.CurCircle_H8 << 8) | GetLegDataRx()->Rock.CurCircle_L8)
+	(((u16)GetLegDataRx()->Rock.CurCircle_H8 << 8) | GetLegDataRx()->Rock.CurCircle_L8)
 #define ROCKPOS_MIN 0
 #define ROCKPOS_N0 0
 #define ROCKPOS_N1 50

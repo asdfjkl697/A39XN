@@ -159,11 +159,11 @@ static uint16_t s_StateTimeout = 0;
 static void S0553Protocol_Reset(void);
 static void S0553Queue_Reset(void);
 static void S0553Link_Reset(void);
-static void S0553_SendFrame(uint8_t cmd, const uint8_t *data, uint16_t dataLen);
+static uint8_t S0553_SendFrame(uint8_t cmd, const uint8_t *data, uint16_t dataLen);
 static void S0553Protocol_Parse(void);
 static uint8_t S0553Protocol_Checksum(const uint8_t *buf, uint16_t len);
 static void S0553_StateMachine(void);
-static void S0553_SendConnectCmd(uint8_t connect);
+static uint8_t S0553_SendConnectCmd(uint8_t connect);
 static void S0553_SendFillImageCmd(uint16_t imageId, uint16_t x, uint16_t y);
 static void S0553_SendFillColorCmd(uint16_t imageId, uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 static void S0553_SendFillAnimCmd(uint8_t animId, uint8_t speed, uint16_t x, uint16_t y);
@@ -185,10 +185,15 @@ static void S0553_SendLongPressTimeCmd(uint8_t cmd, uint16_t time_ms);
  * @param data    数据指针
  * @param dataLen 数据长度
  */
-static void S0553_SendFrame(uint8_t cmd, const uint8_t *data, uint16_t dataLen)
+static uint8_t S0553_SendFrame(uint8_t cmd, const uint8_t *data, uint16_t dataLen)
 {
     uint8_t frame[300];
     uint16_t frameLen = 0;
+
+    if (dataLen > S0553_MAX_DATA_LEN || (dataLen > 0u && data == NULL))
+    {
+        return S0553_HAL_ERROR;
+    }
     
     // 填充帧头
     frame[frameLen++] = S0553_FRAME_HEAD;
@@ -199,12 +204,8 @@ static void S0553_SendFrame(uint8_t cmd, const uint8_t *data, uint16_t dataLen)
     frame[frameLen++] = (uint8_t)(dataLen & 0xFF);
     
     // 填充数据内容
-    if (dataLen > 0 && data != NULL)
+    if (dataLen > 0u)
     {
-        if (dataLen > S0553_MAX_DATA_LEN)
-        {
-            dataLen = S0553_MAX_DATA_LEN;
-        }
         memcpy(&frame[frameLen], data, dataLen);
         frameLen += dataLen;
     }
@@ -223,11 +224,7 @@ static void S0553_SendFrame(uint8_t cmd, const uint8_t *data, uint16_t dataLen)
     }
     LOG_DEBUG("\n");
 
-    // 逐字节发送
-    for (uint16_t i = 0; i < frameLen; i++)
-    {
-        S0553_HAL_UartWriteByte(frame[i]);
-    }
+    return S0553_HAL_UartWriteFrame(frame, frameLen);
 }
 
 /* ==================== 协议解析 ==================== */
@@ -544,10 +541,10 @@ static void S0553_StateMachine(void)
  * @brief 发送连接/断开命令
  * @param connect 1=建立连接, 0=断开连接
  */
-static void S0553_SendConnectCmd(uint8_t connect)
+static uint8_t S0553_SendConnectCmd(uint8_t connect)
 {
     uint8_t data[2] = {0x00, connect};
-    S0553_SendData(S0553_CMD_CONNECT, data, 2);
+    return S0553_SendData(S0553_CMD_CONNECT, data, 2);
 }
 
 /**
@@ -961,9 +958,11 @@ void S0553_Connect(void)
     // 仅在空闲状态下允许连接
     if (s_CurrentState == S0553_STATE_IDLE)
     {
-        S0553_SendConnectCmd(S0553_CONNECT_ESTABLISH);
-        s_CurrentState = S0553_STATE_CONNECTING;
-        s_StateTimeout = S0553_CONNECT_TIMEOUT;
+        if (S0553_SendConnectCmd(S0553_CONNECT_ESTABLISH) == S0553_HAL_OK)
+        {
+            s_CurrentState = S0553_STATE_CONNECTING;
+            s_StateTimeout = S0553_CONNECT_TIMEOUT;
+        }
     }
 }
 
@@ -975,18 +974,23 @@ void S0553_Connect(void)
  * @param data  指向待发送数据缓冲区的指针
  * @param len   数据长度
  */
-void S0553_SendData(uint8_t cmd, const uint8_t *data, uint16_t len)
+uint8_t S0553_SendData(uint8_t cmd, const uint8_t *data, uint16_t len)
 {
     // 如果冷却时间未到，直接丢弃或返回错误，防止刷屏
     if (s_TxQueue.SendCooldown > 0)
     {
-        return; 
+        return S0553_HAL_ERROR;
     }
     // 调用内部静态函数构建并发送数据帧
-    S0553_SendFrame(cmd, data, len);
+    const uint8_t result = S0553_SendFrame(cmd, data, len);
+    if (result != S0553_HAL_OK)
+    {
+        return result;
+    }
     // 设置冷却时间（例如 2 个周期，即 20ms）
     // 这个时间取决于你的 S0553_Process 调用频率
     s_TxQueue.SendCooldown = 2; 
+    return S0553_HAL_OK;
 }
 
 /**

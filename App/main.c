@@ -61,6 +61,7 @@ uint8_t PumpState = 0;
 
 uint8_t LegResetStep = 0;
 uint8_t Core_RestSuccess = 0;
+// volatile uint32_t g_ResetFlagsAtStartup;
 
 void Variable_Init(void)
 {
@@ -81,6 +82,9 @@ void Variable_Init(void)
 */
 int main(void)
 {
+    // g_ResetFlagsAtStartup = *(volatile uint32_t *)(RCU + 0x24U);
+    // rcu_all_reset_flag_clear();
+
     nvic_vector_table_set(NVIC_VECTTAB_FLASH, 0x4000);
 
     /* configure systick */

@@ -56,12 +56,18 @@ extern "C" {
  *                    内部应做好与接收中断/线程的同步（关闭中断或上锁取数）。
  *   - ReadByte    ：取出 1 字节；平台保证仅在 RxAvailable()>0 时被调用，无数据
  *                    时返回 0xFF 兜底亦可。
- *   - WriteByte   ：发送 1 字节，函数返回即代表该字节已被平台接收（阻塞直发或
- *                    写入平台 TX 队列均可），需保证字节级输出顺序。 */
+ *   - WriteByte   ：兼容接口，发送 1 字节；平台不得因 TX 队列满而无限等待。
+ *   - WriteFrame  ：原子写入完整帧；空间不足或参数非法时返回 S0553_HAL_ERROR，
+ *                    不得部分入队或阻塞。
+ */
 uint8_t  S0553_HAL_UartInit(void);
 uint16_t S0553_HAL_UartRxAvailable(void);
 uint8_t  S0553_HAL_UartReadByte(void);
 void     S0553_HAL_UartWriteByte(uint8_t byte);
+uint8_t  S0553_HAL_UartWriteFrame(const uint8_t *data, uint16_t len);
+
+/* 调试计数：因参数非法或 TX 缓冲区空间不足而被拒绝的完整帧数。 */
+extern volatile uint32_t S0553_TxFrameDropCount;
 
 /* ==================== 2. 单调毫秒时基【★仅 PC 调试：MCU 不必实现】 ==================== */
 #ifdef S0553_ENABLE_LOG

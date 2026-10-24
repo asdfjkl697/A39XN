@@ -145,6 +145,7 @@ typedef enum
     ASSIGN_TapSpeed,
     ASSIGN_TreadSpeed,
     ASSIGN_Mark,
+    ASSIGN_FootFindAfterStretch,
     ASSIGNum,
 } ASSIGN_enum;
 

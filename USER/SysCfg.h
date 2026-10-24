@@ -381,7 +381,7 @@
 #define ROLLER_CALVES_EN 1
 #define ROLLER_FOOT_EN 1
 #elif defined A396SYN_2
-#define ANKLE_AIR_WEAK 10
+#define ANKLE_AIR_WEAK 15 // @ 10-15 261024
 #define FEET_AIR_WEAK 10
 #define CALF_AIR_WEAK 20 // @ 15-18-22 261022
 #define USE_REDLIGHT_2KHZ

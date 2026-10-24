@@ -21,7 +21,7 @@ extern "C" {
 /* ==================== 通信配置 ==================== */
 /**
  * @note UART 字节流统一走硬件抽象层（S0553_HAL.h），本文件不再直接引用平台
- *       串口对象/函数。S0553_HAL_UartRxAvailable/ReadByte/WriteByte 由平台实现：
+ *       串口对象/函数。S0553_HAL_UartRxAvailable/ReadByte/WriteFrame 由平台实现：
  *       嵌入式平台按契约实现（UART 中断接收 + 硬件发送）。
  */
 /** @brief 【协议层】帧组装缓冲区容量（字节）

@@ -142,7 +142,7 @@ typedef struct {
 } S0553_TextSeg;
 uint8_t S0553_ShowMultiText(const S0553_TextSeg *segs, uint8_t count);
 
-void S0553_SendData(uint8_t cmd, const uint8_t *data, uint16_t len);
+uint8_t S0553_SendData(uint8_t cmd, const uint8_t *data, uint16_t len);
 
 /**
  * @brief 在屏幕上显示指定图片

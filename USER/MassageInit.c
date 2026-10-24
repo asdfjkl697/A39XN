@@ -155,6 +155,11 @@ void MassageUpdate(void)
 			WorkSecSet(0);
 		}
 #endif
+
+#ifdef USE_FOOT_ROCK
+		if (FootSwing_Level == 0) // todo add 261024
+			LegRockMoveToPosition(ROCKPOS_N2, 5);
+#endif
 		// 零重力更新
 		temp = MassP->Zero;
 		if (temp < Max_Zero)

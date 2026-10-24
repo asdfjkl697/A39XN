@@ -624,7 +624,9 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 #else
 	{Air_UpDw, B(00111011), 70, 15, 45},
 #endif
-	{Motor_Zero, MotorPart_Stretch, 50, 95, 0}, //* 拉伸准备角度
+	{Part_ASSIGN, ASSIGN_FootFindAfterStretch, 0, 0, 0}, //* 拉伸角度停止后重新找脚
+	// {Motor_Zero, MotorPart_Stretch, 50, 95, 0}, //* 拉伸准备角度
+	{Motor_Zero, MotorPart_Stretch, 20, 100, 0},
 
 #ifdef USE_M2
 	{MoveDw_TreadF, FOLW_SPACE, Follow_Space & 0xff, Follow_Space >> 8, 0},
@@ -654,15 +656,18 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 4},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
-	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
 #if (AIR_CLAFBOT)
 	{Air_CalfB, AirPart_ModeB, 80, 8, 80},
 #endif
 #if (AIR_SEAT)
 	{Air_Seat, AirPart_ModeB, 60, 15 + SEAT_AIR_WEAK, 45 - SEAT_AIR_WEAK}, // todo 效果待确认 260518
 #endif
-	{Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
-	{Air_Ankle, AirPart_ModeB, 70 - ANKLE_AIR_WEAK * 2, 8 + ANKLE_AIR_WEAK, 70 - ANKLE_AIR_WEAK * 2},
+	// {Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
+	// {Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
+	// {Air_Ankle, AirPart_ModeB, 70 - ANKLE_AIR_WEAK * 2, 8 + ANKLE_AIR_WEAK, 70 - ANKLE_AIR_WEAK * 2},
+	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 8 + CALF_AIR_WEAK / 2, 80 - CALF_AIR_WEAK},
+	{Air_FeetS, AirPart_ModeB, 80, 8, 80},
+	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK, 8 + ANKLE_AIR_WEAK / 2, 80 - ANKLE_AIR_WEAK},
 
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
 #ifdef USE_M2
@@ -686,6 +691,9 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
+	// {Air_CalfS, AirPart_ModeB, 40 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
+	// {Air_FeetS, AirPart_ModeB, 40 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
+
 	// {Air_UpDw, B(00111011), 0, 10, 60},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5}, // X=1
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_8, 0, 2},		  // Y=8
@@ -699,7 +707,8 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 #else
 	{Air_Keep, 0x3B, 0, 30, 0},
 #endif
-	{Motor_Zero, MotorPart_Stretch, 95, 50, 0}, //* 拉伸角度2
+	// {Motor_Zero, MotorPart_Stretch, 95, 50, 0}, //* 拉伸角度2
+	{Motor_Zero, MotorPart_Stretch, 95, 40, 0},
 	{MoveUp_Knead, KNEAD_1F2R, 0x97, 4, 0x62},
 #if (AIR_CLAFBOT)
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 36, 0, 3},
@@ -710,7 +719,7 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 
 	{Motor_Feet, MotorPart_STOP, 0, 0, 0},
 	{Part_LOOP, 0, 3, 18, 0},
-	{Motor_Flex, MotorPart_FWD, 25, 0, 3}, //* 伸脚
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3}, //* 伸脚
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH3, 0, 5},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_8, 0, 4},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 30, 0, 3},
@@ -725,7 +734,7 @@ const CoreMixOtherTabItem_t SubTab_STR1[] = {
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_9, 0, 4},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
-	{Motor_Flex, MotorPart_REV, 25, 0, 3}, //* 缩脚
+	{Motor_Flex, MotorPart_REV, 20, 0, 3}, //* 缩脚
 #ifdef USE_M2
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
 #else
@@ -837,17 +846,17 @@ const CoreMixOtherTabItem_t SubTab_STR2[] = {
 	{MoveUp_Tap, FLAP_STOP, 0, 0, 0},
 	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
 
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3}, //* 伸脚
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3}, //* 伸脚
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
-	{Motor_Flex, MotorPart_REV, 30, 0, 3}, //* 缩脚
+	{Motor_Flex, MotorPart_REV, 20, 0, 3}, //* 缩脚
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
-	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 20, 30, 0},
@@ -860,12 +869,12 @@ const CoreMixOtherTabItem_t SubTab_STR2[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 20, 30, 0},
 
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{MoveUp_Tap, FLAP_ACT, 0, 0, 6},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
-	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
 
 	{Air_UpDw, B(00000000), 0, 0, 0},
@@ -902,7 +911,10 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 #else
 	{Air_UpDw, B(00111001), 70, 15, 45},
 #endif
-	{Motor_Zero, MotorPart_Stretch, 50, 95, 0}, //* 拉伸准备角度
+	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 8 + CALF_AIR_WEAK / 2, 80 - CALF_AIR_WEAK},
+	{Air_FeetS, AirPart_ModeB, 80, 8, 80},
+	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK, 8 + ANKLE_AIR_WEAK / 2, 80 - ANKLE_AIR_WEAK},
+	{Motor_Zero, MotorPart_Stretch, 20, 100, 0}, // @ 261024
 #ifdef USE_M2
 	{MoveDw_TreadF, FOLW_SPACE, Follow_Space & 0xff, Follow_Space >> 8, 0},
 	{MoveDw_Knead, KNEAD_FIX_CIRCLE, MOVEDWWIDTH5, 0, 5},
@@ -925,15 +937,15 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 4},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
-	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
 #if (AIR_CLAFBOT)
 	{Air_CalfB, AirPart_ModeB, 80, 8, 80},
 #endif
 #if (AIR_SEAT)
 	{Air_Seat, AirPart_ModeB, 60, 15 + SEAT_AIR_WEAK, 45 - SEAT_AIR_WEAK}, // todo 效果待确认 260518
 #endif
-	{Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
-	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK * 2, 8 + ANKLE_AIR_WEAK, 80 - ANKLE_AIR_WEAK * 2},
+	// {Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
+	// {Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
+	// {Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK * 2, 8 + ANKLE_AIR_WEAK, 80 - ANKLE_AIR_WEAK * 2},
 
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH2, 0, 3},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 5},
@@ -999,13 +1011,13 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 #else
 	{Air_Keep, 0x39, 0, 30, 0},
 #endif
-	{Motor_Zero, MotorPart_Stretch, 95, 50, 0}, //* 拉伸角度2
+	{Motor_Zero, MotorPart_Stretch, 95, 40, 0}, // @ 261024
 
 	{Part_LOOP, 0, 2, 16, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 12, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 24, 0, 3},
-	{Motor_Flex, MotorPart_FWD, 25, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
 
 	// todo 增加 翻转 261015
@@ -1017,7 +1029,7 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 36, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	{Motor_Flex, MotorPart_REV, 25, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{Air_Del, Air_ArmR, 0, 0, 0},
 	{Air_Del, Air_CalfS, 0, 0, 0},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
@@ -1029,7 +1041,7 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 12, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 24, 0, 3},
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
 
 	// todo 增加 翻转 261015
@@ -1041,7 +1053,7 @@ const CoreMixOtherTabItem_t SubTab_STR3[] = {
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 36, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 30, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
 
 	{Air_UpDw, B(00000000), 0, 0, 0},
@@ -1140,12 +1152,12 @@ const CoreMixOtherTabItem_t SubTab_STR4[] = {
 
 	{Part_LOOP, 0, 3, 10, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 10, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
-	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 40, 30, 0},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 10, 30, 0},
@@ -1176,8 +1188,12 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Part_AIR, PartCon_Stop, 0, 0, 0},
 
 	{Air_UpDw, B(00111101), 70, 15, 45},
+	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 8 + CALF_AIR_WEAK / 2, 80 - CALF_AIR_WEAK},
+	{Air_FeetS, AirPart_ModeB, 80, 8, 80},
+	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK, 8 + ANKLE_AIR_WEAK / 2, 80 - ANKLE_AIR_WEAK},
 
-	{Motor_Zero, MotorPart_Stretch, 50, 95, 0}, //* 拉伸准备角度
+	// {Motor_Zero, MotorPart_Stretch, 50, 95, 0}, //* 拉伸准备角度
+	{Motor_Zero, MotorPart_Stretch, 20, 100, 0}, //* 拉伸准备角度
 #ifdef USE_M2
 	{MoveDw_TreadF, FOLW_SPACE, Follow_Space & 0xff, Follow_Space >> 8, 0},
 	{MoveDw_Knead, KNEAD_FIX_CIRCLE, MOVEDWWIDTH5, 0, 5},
@@ -1200,15 +1216,19 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_2, 0, 4},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
-	{Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
 #if (AIR_CLAFBOT)
 	{Air_CalfB, AirPart_ModeB, 80, 8, 80},
 #endif
 #if (AIR_SEAT)
 	{Air_Seat, AirPart_ModeB, 60, 15 + SEAT_AIR_WEAK, 45 - SEAT_AIR_WEAK}, // todo 效果待确认 260518
 #endif
-	{Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
-	{Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK * 2, 8 + ANKLE_AIR_WEAK, 80 - ANKLE_AIR_WEAK * 2},
+	// {Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 10 + CALF_AIR_WEAK, 60 - CALF_AIR_WEAK},
+	// {Air_FeetS, AirPart_ModeB, 80 - FEET_AIR_WEAK * 2, 8 + FEET_AIR_WEAK, 80 - FEET_AIR_WEAK * 2},
+	// {Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK * 2, 8 + ANKLE_AIR_WEAK, 80 - ANKLE_AIR_WEAK * 2},
+
+	// {Air_CalfS, AirPart_ModeB, 80 - CALF_AIR_WEAK, 8 + CALF_AIR_WEAK / 2, 80 - CALF_AIR_WEAK},
+	// {Air_FeetS, AirPart_ModeB, 80, 8, 80},
+	// {Air_Ankle, AirPart_ModeB, 80 - ANKLE_AIR_WEAK, 8 + ANKLE_AIR_WEAK / 2, 80 - ANKLE_AIR_WEAK},
 
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_9, 0, 6},
@@ -1232,13 +1252,13 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 #else
 	{Air_Keep, 0x3D, 0, 30, 0},
 #endif
-	{Motor_Zero, MotorPart_Stretch, 95, 50, 0}, //* 拉伸角度2
+	{Motor_Zero, MotorPart_Stretch, 95, 40, 0}, // @ 261024 
 
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{MoveUp_Tap, FLAP_STOP, 0, 0, 0},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
-	{Motor_Flex, MotorPart_FWD, 25, 0, 3}, //* 伸脚
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3}, //* 伸脚
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
@@ -1247,7 +1267,7 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
 	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 
-	{Motor_Flex, MotorPart_REV, 25, 0, 3}, //* 缩脚
+	{Motor_Flex, MotorPart_REV, 20, 0, 3}, //* 缩脚
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
@@ -1257,7 +1277,7 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Air_Del, Air_ArmR, 0, 0, 0},
 #endif
 
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH2, 0, 5},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
@@ -1267,12 +1287,12 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
 	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 
-	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	// {MoveUp_Tap, FLAP_STOP, 0, 0, 0},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
 
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH1, 0, 5},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 48, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 50, 30, 0},
@@ -1282,7 +1302,7 @@ const CoreMixOtherTabItem_t SubTab_STR5[] = {
 	{Part_EXEC, ConMth_MoveUp, 100, 30, 0},
 	{Motor_Rock, FootRock_FIXED, ROCKPOS_N2 & 0xFF, ROCKPOS_N2 >> 8, 5},
 
-	{Motor_Flex, MotorPart_REV, 30, 0, 3},
+	{Motor_Flex, MotorPart_REV, 20, 0, 3},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 0, 0, 3},
 	{Part_EXEC, ConMth_MoveUp, 0, 30, 0},
 
@@ -1402,7 +1422,7 @@ const CoreMixOtherTabItem_t SubTab_STR6[] = {
 
 	{Motor_Feet, MotorPart_STOP, 0, 0, 0},
 	{Part_LOOP, 0, 3, 20, 0},
-	{Motor_Flex, MotorPart_FWD, 30, 0, 3},
+	{Motor_Flex, MotorPart_FWD, 20, 0, 3},
 	{MoveUp_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH2, 0, 5}, // @ ADD 260302
 	{MoveUp_TreadB, TREAD_FIX_CIRCLE, LB_H2, 0, 4},
 	{MoveUp_Flex, FLEX_FIX_CIRCLE, 5, 0, 3},
@@ -1419,7 +1439,7 @@ const CoreMixOtherTabItem_t SubTab_STR6[] = {
 	// {MoveDw_Knead, KNEAD_FIX_CIRCLE, MOVEUPWIDTH3, 0, 5},
 	{MoveDw_TreadB, TREAD_FIX_CIRCLE, LB_1, 0, 9}, // TODO H1 与 2 之间 260531
 	{Part_EXEC, ConMth_Move, 0, 30, 0},
-	{Motor_Flex, MotorPart_REV, 30, 0, 3}, //* 缩脚
+	{Motor_Flex, MotorPart_REV, 20, 0, 3}, //* 缩脚
 	// {MoveUp_Knead, KNEAD_1F2R, 0x64, 0xff, 0x42},
 	// {MoveDw_Knead, KNEAD_1F2R, 0xa6, 4, 0x63},
 	{MoveDw_Knead, KNEAD_1F2R, 0x85, 4, 0x35},

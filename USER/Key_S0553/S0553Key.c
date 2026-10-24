@@ -22,6 +22,19 @@
 #define S0553_UART_BUFFER_MASK (S0553_UART_BUFFER_SIZE - 1u)
 #define S0553_UART_BIT_LENGTH 9u
 
+/* Select 9600u or 115200u; timer runs at 120 MHz with 3x UART sampling. */
+#ifndef S0553_UART_BAUD
+#define S0553_UART_BAUD 9600u
+#endif
+
+#if S0553_UART_BAUD == 9600u
+#define S0553_UART_TIMER_PERIOD 4166u
+#elif S0553_UART_BAUD == 115200u
+#define S0553_UART_TIMER_PERIOD 346u
+#else
+#error S0553_UART_BAUD must be 9600 or 115200
+#endif
+
 static volatile uint8_t s_UartRxBuffer[S0553_UART_BUFFER_SIZE];
 static volatile uint8_t s_UartTxBuffer[S0553_UART_BUFFER_SIZE];
 static volatile uint16_t s_UartRxWrite;
@@ -37,6 +50,7 @@ static volatile uint8_t s_UartRxBits;
 static volatile uint8_t s_UartRxTimeout;
 static volatile uint8_t s_UartTxShift;
 static volatile uint8_t s_UartRxShift;
+volatile uint32_t S0553_TxFrameDropCount;
 
 #define S0553_UART_RX_PIN gpio_input_bit_get(GPIOE, GPIO_PIN_13)
 #define S0553_UART_TX_SET(value) gpio_bit_write(GPIOE, GPIO_PIN_14, (bit_status)(value))
@@ -64,14 +78,14 @@ static void S0553Key_UartInit(void)
     timer_initpara.prescaler = 0;
     timer_initpara.alignedmode = TIMER_COUNTER_EDGE;
     timer_initpara.counterdirection = TIMER_COUNTER_UP;
-    timer_initpara.period = 346;
+    timer_initpara.period = S0553_UART_TIMER_PERIOD;
     timer_initpara.clockdivision = TIMER_CKDIV_DIV1;
     timer_initpara.repetitioncounter = 0;
     timer_init(TIMER4, &timer_initpara);
 
     timer_flag_clear(TIMER4, TIMER_FLAG_UP);
     timer_interrupt_enable(TIMER4, TIMER_INT_UP);
-    nvic_irq_enable(TIMER4_IRQn, 3, 0);
+    nvic_irq_enable(TIMER4_IRQn, 1, 0);
 
     s_UartRxWrite = 0u;
     s_UartRxRead = 0u;
@@ -86,6 +100,7 @@ static void S0553Key_UartInit(void)
     s_UartRxTimeout = 0u;
     s_UartTxShift = 0u;
     s_UartRxShift = 0u;
+    S0553_TxFrameDropCount = 0u;
 
     timer_enable(TIMER4);
 }
@@ -125,7 +140,6 @@ void TIMER4_IRQHandler(void)
                 s_UartTxShift >>= 1;
             }
         }
-        return;
     }
 
     if (s_UartRxActive != 0u)
@@ -165,7 +179,9 @@ void TIMER4_IRQHandler(void)
     {
         --s_UartRxTimeout;
     }
-    else if (s_UartTxRead != s_UartTxWrite)
+    else if (s_UartTxBusy == 0u &&
+             s_UartRxActive == 0u &&
+             s_UartTxRead != s_UartTxWrite)
     {
         S0553Key_UartSetOutput();
         s_UartTxBusy = 1u;
@@ -316,17 +332,57 @@ static uint8_t S0553Key_MapLanguage(uint8_t language, uint8_t *displayLanguage)
     }
 }
 
+static uint8_t S0553Key_MapWiseCommand(int16_t wiseId, uint8_t *keyParam)
+{
+    switch (wiseId)
+    {
+    case 0:
+        *keyParam = 1u; /* TZ */
+        return 1u;
+    case 1:
+        *keyParam = 2u; /* RNZ */
+        return 1u;
+    case 2:
+        *keyParam = 3u; /* PD */
+        return 1u;
+    case 3:
+        *keyParam = 5u; /* RPZ */
+        return 1u;
+    case 4:
+        *keyParam = 4u; /* PDB */
+        return 1u;
+    case 5:
+        *keyParam = 6u; /* ZYS */
+        return 1u;
+    case 8:
+        *keyParam = 7u; /* ZYD */
+        return 1u;
+    case 9:
+        *keyParam = 8u; /* D3RNZ */
+        return 1u;
+    case 10:
+        *keyParam = 9u; /* D3PD */
+        return 1u;
+    case 11:
+        *keyParam = 10u; /* D3RPZ */
+        return 1u;
+    default:
+        return 0u;
+    }
+}
+
 static void S0553Key_SetWise(uint8_t which, int16_t arg)
 {
     const uint8_t previous = MoveWhichGet();
+    uint8_t keyParam;
 
-    if (arg < 0 || arg >= S0553_WISE_COUNT || !S0553Key_WorkIsActive())
+    if (!S0553Key_MapWiseCommand(arg, &keyParam) || !S0553Key_WorkIsActive())
     {
         return;
     }
 
     MoveWhichSet(which);
-    S0553Key_Dispatch(Key_Wise, (uint8_t)arg);
+    S0553Key_Dispatch(Key_Wise, keyParam);
     MoveWhichSet(previous);
 }
 
@@ -533,14 +589,34 @@ uint8_t S0553_HAL_UartReadByte(void)
     return byte;
 }
 
+uint8_t S0553_HAL_UartWriteFrame(const uint8_t *data, uint16_t len)
+{
+    const uint16_t read = s_UartTxRead;
+    uint16_t write = s_UartTxWrite;
+    const uint16_t used = (write >= read)
+                              ? (uint16_t)(write - read)
+                              : (uint16_t)(write + S0553_UART_BUFFER_SIZE - read);
+    const uint16_t available = (uint16_t)(S0553_UART_BUFFER_SIZE - 1u - used);
+
+    if (data == NULL || len == 0u || len > available)
+    {
+        S0553_TxFrameDropCount++;
+        return S0553_HAL_ERROR;
+    }
+
+    /* @ AI md for reboot 261024: publish only complete frames and never wait for TX ISR. */
+    for (uint16_t i = 0u; i < len; i++)
+    {
+        s_UartTxBuffer[write] = data[i];
+        write = (uint16_t)((write + 1u) & S0553_UART_BUFFER_MASK);
+    }
+    s_UartTxWrite = write;
+    return S0553_HAL_OK;
+}
+
 void S0553_HAL_UartWriteByte(uint8_t byte)
 {
-    const uint16_t next = (uint16_t)((s_UartTxWrite + 1u) & S0553_UART_BUFFER_MASK);
-    while (next == s_UartTxRead)
-    {
-    }
-    s_UartTxBuffer[s_UartTxWrite] = byte;
-    s_UartTxWrite = next;
+    (void)S0553_HAL_UartWriteFrame(&byte, 1u);
 }
 
 void S0553_HAL_EnterCritical(void)

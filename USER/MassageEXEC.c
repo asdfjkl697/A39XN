@@ -1,12 +1,27 @@
 #include "MassageEXEC.h"
 #include "MassageLogic.h"
 #include "Leg.h"
+#include "Motor.h"
 
 MotorT_Work_S MotorT_Work;
+
+#if (LEG_COM)
+static bool s_FootFindAfterStretchArmed;
+#endif
+
+void MotorT_FootFindAfterStretchArm(void)
+{
+#if (LEG_COM)
+	s_FootFindAfterStretchArmed = true;
+#endif
+}
 
 void Motor_Work_Iint(void)
 {
 	memset(&MotorT_Work, 0, sizeof(MotorT_Work_S));
+#if (LEG_COM)
+	s_FootFindAfterStretchArmed = false;
+#endif
 }
 
 void MotorT_100ms_Deal(void) //* 100ms 时基
@@ -74,6 +89,13 @@ void MotorT_100ms_Deal(void) //* 100ms 时基
 			else if (MotorT_Work.Cmd[i] == MotorPart_Stretch)
 			{
 				DDG_Set_SitCircle(MotorT_Work.Para1[i], MotorT_Work.Para2[i]);
+#if (LEG_COM)
+				if (s_FootFindAfterStretchArmed)
+				{
+					LegAutoAdj = 1;
+					s_FootFindAfterStretchArmed = false;
+				}
+#endif
 			}
 			break;
 #if (LEG_COM)

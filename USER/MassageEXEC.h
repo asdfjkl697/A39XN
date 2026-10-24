@@ -58,4 +58,5 @@ extern MotorT_Work_S MotorT_Work;
 extern void MotorPart_Date_Set(u8 motorpart, u8 para0, u8 method, u8 para1, u8 para2, u8 para3);
 extern void Part_EXEC_Process(void);
 extern void Motor_Work_Iint(void);
+extern void MotorT_FootFindAfterStretchArm(void);
 #endif
